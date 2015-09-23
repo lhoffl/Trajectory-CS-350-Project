@@ -1,6 +1,5 @@
 package Model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -53,12 +52,18 @@ public class Game {
 		targetSpawnX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		targetSpawnY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		
-		// Calculate target area
-		for(double i = targetSpawnX; i <= targetSpawnX+1; i += 0.01){
-			for(double j = targetSpawnY; j >= targetSpawnY-1; j -= 0.01){
-				targetX.add(i);
-				targetY.add(j);
-			}
+		
+		// Calculate target area 
+		// Slightly fixed, off by 0.01 at the end
+		for(int i = 0; i < 100; i++){
+				
+				//modify current location
+				targetSpawnX += 0.01;
+				targetSpawnY -= 0.01;
+				
+				//add them to the target area
+				targetX.add(targetSpawnX);
+				targetY.add(targetSpawnY);
 		}
 		
 		for(int i = 0; i < targetX.size(); i++){
@@ -75,6 +80,7 @@ public class Game {
 	
 	public void throwBall(double posX, double posY, double velX, double velY) {
 		
+		//initialize starting position and velocity
 		positionX = posX;
 		positionY = posY;
 		velocityX = velX;
