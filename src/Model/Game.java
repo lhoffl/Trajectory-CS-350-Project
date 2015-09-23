@@ -47,7 +47,6 @@ public class Game {
 		
 		targetX = new ArrayList<Double>();
 		targetY = new ArrayList<Double>();
-
 				
 		targetSpawnX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		targetSpawnY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
@@ -66,14 +65,23 @@ public class Game {
 				targetY.add(targetSpawnY);
 		}
 		
-		for(int i = 0; i < targetX.size(); i++){
-			System.out.printf("Target: (%.2f, %.2f)\n", targetX.get(i), targetY.get(i));
-		}
+//		for(int i = 0; i < targetX.size(); i++){
+//			System.out.printf("Target: (%.2f, %.2f)\n", targetX.get(i), targetY.get(i));
+//		}
 		
 		//System.out.printf("randomly generated target = (%f, %f)\n", targetX, targetY);
 	}
 	
+	// doesn't work
 	public boolean hitTarget(){
+		
+		for(int i = 0; i < targetX.size(); i++){
+			for(int j = 0; j < targetY.size(); j++){
+				if((pathX.get(i) == targetX.get(i)) && (pathY.get(j) == targetY.get(j))){
+					return true;
+				}
+			}
+		}
 		
 		return false;
 	}
@@ -119,19 +127,25 @@ public class Game {
 			pathY.add(positionY);
 		}
 		
-		for(int i = 0; i < pathX.size(); i++){
-			System.out.printf("Path: (%f, %f)\n", pathX.get(i), pathY.get(i));
-		}
+//		for(int i = 0; i < pathX.size(); i++){
+//			System.out.printf("Path: (%f, %f)\n", pathX.get(i), pathY.get(i));
+//		}
 	}
 	
 	// run the game
 	public static void main(String[] args){
 		Game game = new Game();
+				
+		boolean win = false;
 		
-		//throw the ball, posx, posy, velx, vely
-		//game.throwBall(0,0,2,10);
-		
-		game.newTarget();
+		while(!win){
+			game.newTarget();
+			game.throwBall(0,0,2,10);
+			if(game.hitTarget()){
+				System.out.println("nice\n");
+				win = true;
+			}
+		}
 	}
 	
 }
