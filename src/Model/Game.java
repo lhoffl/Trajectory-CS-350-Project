@@ -1,8 +1,11 @@
 package Model;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import java.util.Random;
 
+@SuppressWarnings("unused")
 public class Game {
 
 	private final double gravity = 9.8;
@@ -24,20 +27,34 @@ public class Game {
 	private int maxBounce = 3;
 	
 	// ArrayLists for storing the final path of the ball
-	private ArrayList<Double> pathX;
-	private ArrayList<Double> pathY;
-	
+	private ArrayList<Point2D.Float> path;
+
 	// Dimensions of the board
-	private int width = 20;
-	private int height = 20;
+	private int width;
+	private int height;
 	
 	// Target position
-	private double targetSpawnX;
-	private double targetSpawnY;
+	private Point2D.Float targetPosition;
+	private Point2D.Float pathPosition;
 	
-	private ArrayList<Double> targetX;
-	private ArrayList<Double> targetY;
+	private ArrayList<Point2D.Float> target;
+	
+	public Game(){
+		path = new ArrayList<Point2D.Float>();
+		target = new ArrayList<Point2D.Float>();
+		
+		targetPosition = new Point2D.Float();
+		pathPosition = new Point2D.Float();
 
+		height = 20;
+		width = 20;
+		
+		Point2D.Float test = new Point2D.Float();
+		test.setLocation(12, 2);
+		
+		//path.add(test);
+		//target.add(test);
+	}
 	public void newTarget(){
 		
 		Random rand = new Random();
@@ -45,24 +62,21 @@ public class Game {
 		double rangeMax = width-1;
 		double rangeMin = width/2;
 		
-		targetX = new ArrayList<Double>();
-		targetY = new ArrayList<Double>();
-				
-		targetSpawnX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-		targetSpawnY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-		
+		double tempX, tempY;
+		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		
 		// Calculate target area 
 		// Slightly fixed, off by 0.01 at the end
 		for(int i = 0; i < 100; i++){
 				
 				//modify current location
-				targetSpawnX += 0.01;
-				targetSpawnY -= 0.01;
+				tempX += 0.01;
+				tempY -= 0.01;
 				
 				//add them to the target area
-				targetX.add(targetSpawnX);
-				targetY.add(targetSpawnY);
+				targetPosition.setLocation(tempX, tempY);
+				target.add(targetPosition);
 		}
 		
 //		for(int i = 0; i < targetX.size(); i++){
@@ -75,14 +89,15 @@ public class Game {
 	// doesn't work
 	public boolean hitTarget(){
 		
-		for(int i = 0; i < targetX.size(); i++){
-			for(int j = 0; j < targetY.size(); j++){
-				if((pathX.get(i) == targetX.get(i)) && (pathY.get(j) == targetY.get(j))){
+		for(int i = 0; i < path.size(); i++){
+			for(int j = 0; j < target.size(); j++){
+		
+				if(path.get(i).equals(target.get(j))){
 					return true;
 				}
 			}
 		}
-		
+		System.out.println("Sorry you missed the target");
 		return false;
 	}
 	
@@ -93,12 +108,6 @@ public class Game {
 		positionY = posY;
 		velocityX = velX;
 		velocityY = velY;
-		
-		width = 20;
-		height = 20;
-		
-		pathX = new ArrayList<Double>();
-		pathY = new ArrayList<Double>();
 		
 		while (inMotion) {
 			
@@ -123,8 +132,8 @@ public class Game {
 			}
 			
 			//update path of the ball
-			pathX.add(positionX);
-			pathY.add(positionY);
+			pathPosition.setLocation(positionX, positionY);
+			path.add(pathPosition);
 		}
 		
 //		for(int i = 0; i < pathX.size(); i++){
@@ -137,9 +146,9 @@ public class Game {
 		Game game = new Game();
 				
 		boolean win = false;
+		game.newTarget();
 		
 		while(!win){
-			game.newTarget();
 			game.throwBall(0,0,2,10);
 			if(game.hitTarget()){
 				System.out.println("nice\n");
