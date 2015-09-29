@@ -27,33 +27,27 @@ public class Game {
 	private int maxBounce = 3;
 	
 	// ArrayLists for storing the final path of the ball
-	private ArrayList<Point2D.Float> path;
+	private ArrayList<Point2D.Double> path;
 
 	// Dimensions of the board
 	private int width;
 	private int height;
 	
 	// Target position
-	private Point2D.Float targetPosition;
-	private Point2D.Float pathPosition;
+	private Point2D.Double targetPosition;
+	private Point2D.Double pathPosition;
 	
-	private ArrayList<Point2D.Float> target;
+	private ArrayList<Point2D.Double> target;
 	
 	public Game(){
-		path = new ArrayList<Point2D.Float>();
-		target = new ArrayList<Point2D.Float>();
+		path = new ArrayList<Point2D.Double>();
+		target = new ArrayList<Point2D.Double>();
 		
-		targetPosition = new Point2D.Float();
-		pathPosition = new Point2D.Float();
+		targetPosition = new Point2D.Double();
+		pathPosition = new Point2D.Double();
 
 		height = 20;
 		width = 20;
-		
-		Point2D.Float test = new Point2D.Float();
-		test.setLocation(12, 2);
-		
-		//path.add(test);
-		//target.add(test);
 	}
 	public void newTarget(){
 		
@@ -63,12 +57,14 @@ public class Game {
 		double rangeMin = width/2;
 		
 		double tempX, tempY;
-		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+//		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+//		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+		tempX = 10;
+		tempY = 2;
 		
 		// Calculate target area 
 		// Slightly fixed, off by 0.01 at the end
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 10000; i++){
 				
 				//modify current location
 				tempX += 0.01;
@@ -78,34 +74,34 @@ public class Game {
 				targetPosition.setLocation(tempX, tempY);
 				target.add(targetPosition);
 		}
-		
-//		for(int i = 0; i < targetX.size(); i++){
-//			System.out.printf("Target: (%.2f, %.2f)\n", targetX.get(i), targetY.get(i));
+//		for(int i = 0; i < target.size(); i++){
+//			System.out.println(target);
 //		}
-		
-		//System.out.printf("randomly generated target = (%f, %f)\n", targetX, targetY);
 	}
 	
-	// doesn't work
+	// did you hit the target????!?!?!?!
 	public boolean hitTarget(){
 		
 		for(int i = 0; i < path.size(); i++){
 			for(int j = 0; j < target.size(); j++){
-		
-				if(path.get(i).equals(target.get(j))){
+			
+				int checkX = Double.compare(((double)Math.round(path.get(i).x * 100d) / 100d), ((double)Math.round(target.get(i).x * 100d) / 100d));
+				int checkY = Double.compare(((double)Math.round(path.get(i).y * 100d) / 100d), ((double)Math.round(target.get(i).y * 100d) / 100d));
+				System.out.printf("Path: (%f,%f)  |  Target: (%f,%f)\n", path.get(i).x, path.get(i).y, target.get(i).x, target.get(i).y);
+				if(checkX == 0 && checkY == 0){
 					return true;
 				}
 			}
 		}
-		System.out.println("Sorry you missed the target");
+		//System.out.println("Sorry you missed the target");
 		return false;
 	}
 	
-	public void throwBall(double posX, double posY, double velX, double velY) {
+	public void throwBall(double velX, double velY) {
 		
 		//initialize starting position and velocity
-		positionX = posX;
-		positionY = posY;
+		positionX = 0;
+		positionY = 0;
 		velocityX = velX;
 		velocityY = velY;
 		
@@ -125,7 +121,7 @@ public class Game {
 			velocityY = velocityY - (gravity * changeInTime);
 			positionX += velocityX * changeInTime;  //consider bouncing later
 			positionY += (velocityY * changeInTime) - (1/2)*(gravity * (Math.pow(changeInTime, 2)));
-			
+		
 			//stop the ball
 			if (bounceCounter > maxBounce) {
 				inMotion = false;
@@ -134,11 +130,19 @@ public class Game {
 			//update path of the ball
 			pathPosition.setLocation(positionX, positionY);
 			path.add(pathPosition);
+			
+//			for(int i = 0; i < path.size(); i++){
+//				System.out.print(path.get(i));
+//			}
 		}
-		
-//		for(int i = 0; i < pathX.size(); i++){
-//			System.out.printf("Path: (%f, %f)\n", pathX.get(i), pathY.get(i));
-//		}
+	}
+	
+	public ArrayList<Point2D.Double> getTarget(){
+		return target;
+	}
+	
+	public ArrayList<Point2D.Double> getPath(){
+		return path;
 	}
 	
 	// run the game
@@ -149,7 +153,7 @@ public class Game {
 		game.newTarget();
 		
 		while(!win){
-			game.throwBall(0,0,2,10);
+			game.throwBall(5, 9.8);
 			if(game.hitTarget()){
 				System.out.println("nice\n");
 				win = true;
