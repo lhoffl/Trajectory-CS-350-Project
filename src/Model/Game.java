@@ -2,6 +2,7 @@ package Model;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,28 +27,40 @@ public class Game {
 	
 	private int maxBounce = 3;
 	
+	private DecimalFormat df;
+	
 	// ArrayLists for storing the final path of the ball
-	private ArrayList<Point2D.Double> path;
+	private ArrayList<Double> pathX;
+	private ArrayList<Double> pathY;
+	
 
 	// Dimensions of the board
 	private int width;
 	private int height;
 	
 	// Target position
-	private Point2D.Double targetPosition;
-	private Point2D.Double pathPosition;
+	private double targetPositionX;
+	private double targetPositionY;
+
+	private double pathPositionX;
+	private double pathPositionY;
+
 	
-	private ArrayList<Point2D.Double> target;
+	private ArrayList<Double> targetX;
+	private ArrayList<Double> targetY;
 	
 	public Game(){
-		path = new ArrayList<Point2D.Double>();
-		target = new ArrayList<Point2D.Double>();
-		
-		targetPosition = new Point2D.Double();
-		pathPosition = new Point2D.Double();
+		pathX = new ArrayList<Double>();
+		pathY = new ArrayList<Double>();
+
+		targetX = new ArrayList<Double>();
+		targetY = new ArrayList<Double>();
 
 		height = 20;
 		width = 20;
+		
+		df = new DecimalFormat("#.###");
+
 	}
 	public void newTarget(){
 		
@@ -71,8 +84,12 @@ public class Game {
 				tempY -= 0.01;
 				
 				//add them to the target area
-				targetPosition.setLocation(tempX, tempY);
-				target.add(targetPosition);
+				targetPositionX = tempX;
+				targetPositionY = tempY;
+				
+				targetX.add(targetPositionX);
+				targetY.add(targetPositionY);
+
 		}
 //		for(int i = 0; i < target.size(); i++){
 //			System.out.println(target);
@@ -82,12 +99,12 @@ public class Game {
 	// did you hit the target????!?!?!?!
 	public boolean hitTarget(){
 		
-		for(int i = 0; i < path.size(); i++){
-			for(int j = 0; j < target.size(); j++){
+		for(int i = 0; i < pathX.size(); i++){
+			for(int j = 0; j < targetX.size(); j++){
 			
-				int checkX = Double.compare(((double)Math.round(path.get(i).x * 100d) / 100d), ((double)Math.round(target.get(i).x * 100d) / 100d));
-				int checkY = Double.compare(((double)Math.round(path.get(i).y * 100d) / 100d), ((double)Math.round(target.get(i).y * 100d) / 100d));
-				System.out.printf("Path: (%f,%f)  |  Target: (%f,%f)\n", path.get(i).x, path.get(i).y, target.get(i).x, target.get(i).y);
+				int checkX = Double.compare(Math.round(pathX.get(i)), Math.round(targetX.get(i)));
+				int checkY = Double.compare(Math.round(pathY.get(i)), Math.round(targetY.get(i)));
+				//System.out.printf("Path: (%f,%f)  |  Target: (%f,%f)\n", path.get(i).x, path.get(i).y, target.get(i).x, target.get(i).y);
 				if(checkX == 0 && checkY == 0){
 					return true;
 				}
@@ -128,21 +145,23 @@ public class Game {
 			}
 			
 			//update path of the ball
-			pathPosition.setLocation(positionX, positionY);
-			path.add(pathPosition);
+			pathPositionX = positionX;
+			pathPositionY = positionY;
 			
-//			for(int i = 0; i < path.size(); i++){
-//				System.out.print(path.get(i));
-//			}
+			pathX.add(pathPositionX);
+			pathY.add(pathPositionY);			
+		}
+		for(int i = 0; i < pathX.size(); i++){
+			System.out.println("(" + pathX.get(i) +" , " + pathY.get(i) +")");
 		}
 	}
 	
-	public ArrayList<Point2D.Double> getTarget(){
-		return target;
+	public ArrayList<Double> getTargetX(){
+		return targetX;
 	}
 	
-	public ArrayList<Point2D.Double> getPath(){
-		return path;
+	public ArrayList<Double> getPathX(){
+		return pathX;
 	}
 	
 	// run the game
@@ -153,7 +172,7 @@ public class Game {
 		game.newTarget();
 		
 		while(!win){
-			game.throwBall(5, 9.8);
+			game.throwBall(10, 9.8);
 			if(game.hitTarget()){
 				System.out.println("nice\n");
 				win = true;

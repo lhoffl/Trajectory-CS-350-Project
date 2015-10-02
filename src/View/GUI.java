@@ -78,7 +78,7 @@ class drawTarget extends JPanel{
 		game.newTarget();
 		game.throwBall(2,15);
 		Point2D.Double t = new Point2D.Double();
-		t = game.getTarget().get(0);
+		//t = game.getTargetX().get(0);
 		
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
@@ -86,9 +86,9 @@ class drawTarget extends JPanel{
 		Rectangle2D target = new Rectangle2D.Double(t.x * 10,t.y * 10, 10.0, 10.0);
 		g2.draw(target);
 		
-		for(int i = 0; i < game.getPath().size() - 1; i++){
-			Line2D.Double temp = new Line2D.Double(game.getPath().get(i).x * 10, game.getPath().get(i).y * 10, game.getPath().get(i+1).x * 10, game.getPath().get(i+1).y * 10);
-			g2.draw(temp);
+		//for(int i = 0; i < game.getPath().size() - 1; i++){
+		//	Line2D.Double temp = new Line2D.Double(game.getPath().get(i).x * 10, game.getPath().get(i).y * 10, game.getPath().get(i+1).x * 10, game.getPath().get(i+1).y * 10);
+		//	g2.draw(temp);
 		}
 	}
-}
+//}
