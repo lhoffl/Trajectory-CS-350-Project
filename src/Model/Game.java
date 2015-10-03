@@ -38,24 +38,20 @@ public class Game {
 	private int width;
 	private int height;
 	
-	// Target position
-	private double targetPositionX;
-	private double targetPositionY;
-
-	private double pathPositionX;
-	private double pathPositionY;
-
-	
 	private ArrayList<Double> targetX;
 	private ArrayList<Double> targetY;
-	
+
 	public Game(){
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
-
+//		pathX.add(2.0);
+//		pathY.add(3.0);
+		
 		targetX = new ArrayList<Double>();
 		targetY = new ArrayList<Double>();
-
+		//targetX.add(2.0);
+		//targetY.add(3.0);
+		
 		height = 20;
 		width = 20;
 		
@@ -70,29 +66,26 @@ public class Game {
 		double rangeMin = width/2;
 		
 		double tempX, tempY;
-//		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-//		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-		tempX = 10;
-		tempY = 2;
+		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+		tempX = 20;
+		tempY = 0;
 		
 		// Calculate target area 
 		// Slightly fixed, off by 0.01 at the end
-		for(int i = 0; i < 10000; i++){
+		for(int i = 0; i < 100; i++){
 				
 				//modify current location
 				tempX += 0.01;
 				tempY -= 0.01;
 				
 				//add them to the target area
-				targetPositionX = tempX;
-				targetPositionY = tempY;
-				
-				targetX.add(targetPositionX);
-				targetY.add(targetPositionY);
+				targetX.add(tempX);
+				targetY.add(tempY);
 
 		}
-//		for(int i = 0; i < target.size(); i++){
-//			System.out.println(target);
+//		for(int i = 0; i < targetX.size(); i++){
+//			System.out.printf("%d: (%f,%f)\n", i, targetX.get(i),targetY.get(i));
 //		}
 	}
 	
@@ -101,11 +94,16 @@ public class Game {
 		
 		for(int i = 0; i < pathX.size(); i++){
 			for(int j = 0; j < targetX.size(); j++){
-			
-				int checkX = Double.compare(Math.round(pathX.get(i)), Math.round(targetX.get(i)));
-				int checkY = Double.compare(Math.round(pathY.get(i)), Math.round(targetY.get(i)));
-				//System.out.printf("Path: (%f,%f)  |  Target: (%f,%f)\n", path.get(i).x, path.get(i).y, target.get(i).x, target.get(i).y);
-				if(checkX == 0 && checkY == 0){
+			    //covert points to 3 decimal places and check if the target was hit
+				boolean checkX = false, checkY = false;
+				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.0001){
+					checkX = true;
+				}
+				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.0001){
+					checkY = true;
+				}
+				//System.out.printf("%d Path: (%f,%f)  |  Target: (%f,%f)\n", i, pathX.get(i), pathY.get(i), targetX.get(j), targetY.get(j));
+				if(checkX&&checkY){
 					return true;
 				}
 			}
@@ -145,15 +143,12 @@ public class Game {
 			}
 			
 			//update path of the ball
-			pathPositionX = positionX;
-			pathPositionY = positionY;
-			
-			pathX.add(pathPositionX);
-			pathY.add(pathPositionY);			
+			pathX.add(positionX);
+			pathY.add(positionY);			
 		}
-		for(int i = 0; i < pathX.size(); i++){
-			System.out.println("(" + pathX.get(i) +" , " + pathY.get(i) +")");
-		}
+//		for(int i = 0; i < pathX.size(); i++){
+//			System.out.println("(" + pathX.get(i) +" , " + pathY.get(i) +")");
+//		}
 	}
 	
 	public ArrayList<Double> getTargetX(){
@@ -172,7 +167,7 @@ public class Game {
 		game.newTarget();
 		
 		while(!win){
-			game.throwBall(10, 9.8);
+			game.throwBall(5, 9.8);
 			if(game.hitTarget()){
 				System.out.println("nice\n");
 				win = true;
