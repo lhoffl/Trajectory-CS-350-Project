@@ -18,9 +18,7 @@ import javax.swing.JTextField;
 import Model.Game;
 
 public class GUI extends JFrame implements ActionListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JPanel panelNorth;
@@ -29,6 +27,7 @@ public class GUI extends JFrame implements ActionListener{
 	private JLabel xVel;
 	private JLabel yVel;
 	private JLabel numOfTurns;
+	private JLabel targetLocation;
 	private JLabel result;
 	private JTextField xField;
 	private JTextField yField;
@@ -41,10 +40,10 @@ public class GUI extends JFrame implements ActionListener{
 
 
 	public GUI(){
-
+		game = new Game();
 		panel = new JPanel();
 		panelNorth = new JPanel();
-		panelSouth = new JPanel(new GridLayout(2,0));
+		panelSouth = new JPanel(new GridLayout(3,0));
 		fire = new JButton("Fire!");
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
@@ -53,17 +52,11 @@ public class GUI extends JFrame implements ActionListener{
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
-		result = new JLabel("Result of Shot:       Please Shoot!");
+		targetLocation = new JLabel("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
+		result = new JLabel("");
 		xField = new JTextField(5);
 		yField = new JTextField(5);
-		game = new Game();
 		numTurns = 0;
-
-		setSize(350,150);
-		setTitle("Trajectory!");
-		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
 
 		bar.add(file);
 		file.add(reset);
@@ -78,10 +71,17 @@ public class GUI extends JFrame implements ActionListener{
 		panelNorth.add(yVel);
 		panelNorth.add(yField);
 		panelNorth.add(fire);
+		panelSouth.add(targetLocation);
 		panelSouth.add(numOfTurns);
 		panelSouth.add(result);
 
 		setJMenuBar(bar);
+		
+		setSize(350,150);
+		setTitle("Trajectory!");
+		setVisible(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		fire.addActionListener(this);
 		reset.addActionListener(this);
@@ -92,7 +92,7 @@ public class GUI extends JFrame implements ActionListener{
 		game.newTarget();
 		numTurns = 0;
 		numOfTurns.setText("Number of Shots: " + numTurns);
-		result.setText("Result of Shot:       Please Shoot!");
+		targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 		xField.setText("");
 		yField.setText("");
 	}
@@ -103,17 +103,31 @@ public class GUI extends JFrame implements ActionListener{
 		JComponent e = (JComponent)event.getSource();
 
 		if(e == fire){
-			double xVal = Double.parseDouble(xField.getText());
-			double yVal = Double.parseDouble(yField.getText());
-			game.setVelX(xVal);
-			game.setVelY(yVal);
-			game.throwBall(xVal, yVal);
-			numTurns++;
-			numOfTurns.setText("Number of Shots: " + numTurns);
-			result.setText("Result of Shot:       " + game.getResult());
-			if(game.hitTarget()){
-				JOptionPane.showMessageDialog(panel, "You hit the target!");
-				newGame();
+			try{
+				double xVal = Double.parseDouble(xField.getText());
+				double yVal = Double.parseDouble(yField.getText());
+				
+				if(xVal < 0 || yVal < 0){
+					xVal = 0;
+					yVal = 0;
+					result.setText("U SUCK");
+				}else{
+					result.setText("");
+				}
+				
+				game.setVelX(xVal);
+				game.setVelY(yVal);
+				
+				game.throwBall(xVal, yVal);
+				numTurns++;
+				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
+				numOfTurns.setText("Number of Shots: " + numTurns);
+				if(game.hitTarget()){
+					JOptionPane.showMessageDialog(panel, "You hit the target!");
+					newGame();
+				}
+			}catch(NumberFormatException n){
+				
 			}
 			xField.setText("");
 			yField.setText("");

@@ -28,7 +28,7 @@ public class Game {
 	private boolean inMotion = true;
 	
 	private int bounceCounter = 0;
-	private int maxBounce = 3;
+	private int maxBounce = 1;
 	
 	private DecimalFormat df;
 	
@@ -43,6 +43,8 @@ public class Game {
 	// ArrayLists for storing the entire target area
 	private ArrayList<Double> targetX;
 	private ArrayList<Double> targetY;
+
+	private Scanner sc;
 	
 	private String result;
 	
@@ -55,8 +57,9 @@ public class Game {
 		
 		//height = 20;
 		width = 20;
-		
 		df = new DecimalFormat("#.###");
+		this.newTarget();
+		sc = new Scanner(System.in);
 				
 		result = "";
 	}
@@ -72,25 +75,33 @@ public class Game {
 		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		
-		// reset the target area
-		targetX.clear();
-		targetY.clear();
-		
-		//test point
-		tempX = 20;
+//		//test point
+//		tempX = 10;
 		tempY = 0;
+		targetX.add(tempX);
+		targetY.add(tempY);
+		
+		boolean test = false; 
+		if (tempY - 1 > 0){
+			test = true;
+		}
 		
 		// Calculate target area 
 		for(int i = 0; i < 100; i++){
 				
 				//modify current location
 				tempX += 0.01;
-				tempY -= 0.01;
+				if(test){
+					tempY -= 0.01;
+				}
+				else
+					tempY += 0.01;
 				
 				//add them to the target area
 				targetX.add(tempX);
 				targetY.add(tempY);
 		}
+
 	}
 	
 	// did you hit the target?
@@ -101,11 +112,11 @@ public class Game {
 				
 			    //covert points to 3 decimal places and check if the target was hit
 				boolean checkX = false, checkY = false;
-				
-				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.0001){
+				//System.out.printf("path: (%f,%f), target: (%f,%f)\n", pathX.get(i), pathY.get(i), targetY.get(j), targetY.get(j));
+				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.1){
 					checkX = true;
 				}
-				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.0001){
+				if(Math.abs(Double.parseDouble(df.format(pathY.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.1){
 					checkY = true;
 				}
 				
@@ -162,28 +173,10 @@ public class Game {
 	
 	/**
 	 * 
-	 */
-	public static void main(String[] args){
-		Game game = new Game();
-		boolean win = false;
-		game.newTarget();
-		
-		while(!win){
-			game.throwBall(game.velocityX, game.velocityY);
-			if(game.hitTarget()){
-				win = true;
-				game.result = "YOU hit the target!";
-			}
-			game.result = "Sorry try again";
-		}
-	}
-	
-	/**
-	 * 
 	 * @return targetX
 	 */
-	public ArrayList<Double> getTargetX(){
-		return targetX;
+	public String getTargetX(){
+		return df.format(targetX.get(0));
 	}
 	
 	/**
@@ -198,8 +191,8 @@ public class Game {
 	 * 
 	 * @return targetY
 	 */
-	public ArrayList<Double> getTargetY(){
-		return targetY;
+	public String getTargetY(){
+		return df.format(targetY.get(0));
 	}
 	
 	/**
