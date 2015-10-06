@@ -1,94 +1,128 @@
 package View;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import Model.Game;
 
-import com.sun.javafx.geom.QuadCurve2D;
-
-import sun.java2d.loops.DrawRect;
-
 public class GUI extends JFrame implements ActionListener{
-	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JLabel label;
+	private JPanel panelNorth;
+	private JPanel panelSouth;
+	private JButton fire;
+	private JLabel xVel;
+	private JLabel yVel;
+	private JLabel numOfTurns;
+	private JLabel result;
+	private JTextField xField;
+	private JTextField yField;
+	private JMenuItem reset;
+	private JMenuItem exit;
+	private JMenuBar bar;
+	private JMenu file;
 	private Game game;
-	
-	
+	private int numTurns;
+
+
 	public GUI(){
-		panel = new JPanel(new BorderLayout());
-		label = new JLabel("SDfasdfadfgbvjxdflkgh");
-				
+
+		panel = new JPanel();
+		panelNorth = new JPanel();
+		panelSouth = new JPanel(new GridLayout(2,0));
+		fire = new JButton("Fire!");
+		reset = new JMenuItem("New Game");
+		exit = new JMenuItem("Exit");
+		bar = new JMenuBar();
+		file = new JMenu("File");
+		xVel = new JLabel("X-Velocity");
+		yVel = new JLabel("Y-Velocity");
+		numOfTurns = new JLabel("Number of Shots: " + numTurns);
+		result = new JLabel("Result of Shot:       Please Shoot!");
+		xField = new JTextField(5);
+		yField = new JTextField(5);
+		game = new Game();
+		numTurns = 0;
+
+		setSize(350,150);
+		setTitle("Trajectory!");
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Trajectory!");
 		setResizable(false);
-		setSize(500,500);
-		
+
+		bar.add(file);
+		file.add(reset);
+		file.add(exit);
+
 		add(panel);
-		add(new drawTarget());
-		//panel.add(label);
-	}
+		panel.add(panelNorth);
+		panel.add(panelSouth);
+		panel.add(bar);
+		panelNorth.add(xVel);
+		panelNorth.add(xField);
+		panelNorth.add(yVel);
+		panelNorth.add(yField);
+		panelNorth.add(fire);
+		panelSouth.add(numOfTurns);
+		panelSouth.add(result);
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-	}
-	
-	public static void main(String args[]){
-		new GUI();
-	}
-	
-	private Rectangle2D drawTarget(Point2D.Double t){		
+		setJMenuBar(bar);
 
-		
-		double x = t.x;
-		double y = t.y;
-		
-		double w = 100.0;
-		double h = 100.0;	
-		
-		Rectangle2D target = new Rectangle2D.Double(x, y, w, h);
-		return target;
-	}
-}	
-// do things
-class drawTarget extends JPanel{
-	public Game game = new Game();
-	
-	@Override
-	public Dimension getMinimumSize(){
-		return new Dimension(100,100);
-	}
-	protected void paintComponent(Graphics g){
+		fire.addActionListener(this);
+		reset.addActionListener(this);
+		exit.addActionListener(this);
 		game.newTarget();
-		game.throwBall(2,15);
-		Point2D.Double t = new Point2D.Double();
-		//t = game.getTargetX().get(0);
-		
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.RED);
-		Rectangle2D target = new Rectangle2D.Double(t.x * 10,t.y * 10, 10.0, 10.0);
-		g2.draw(target);
-		
-		//for(int i = 0; i < game.getPath().size() - 1; i++){
-		//	Line2D.Double temp = new Line2D.Double(game.getPath().get(i).x * 10, game.getPath().get(i).y * 10, game.getPath().get(i+1).x * 10, game.getPath().get(i+1).y * 10);
-		//	g2.draw(temp);
-		}
 	}
-//}
+	private void newGame() {
+		game.newTarget();
+		numTurns = 0;
+		numOfTurns.setText("Number of Shots: " + numTurns);
+		result.setText("Result of Shot:       Please Shoot!");
+		xField.setText("");
+		yField.setText("");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+
+		JComponent e = (JComponent)event.getSource();
+
+		if(e == fire){
+			double xVal = Double.parseDouble(xField.getText());
+			double yVal = Double.parseDouble(yField.getText());
+			game.setVelX(xVal);
+			game.setVelY(yVal);
+			game.throwBall(xVal, yVal);
+			numTurns++;
+			numOfTurns.setText("Number of Shots: " + numTurns);
+			result.setText("Result of Shot:       " + game.getResult());
+			if(game.hitTarget()){
+				JOptionPane.showMessageDialog(panel, "You hit the target!");
+				newGame();
+			}
+			xField.setText("");
+			yField.setText("");
+		}
+		if(e == reset){
+			newGame();
+		}
+		if(e == exit)
+			System.exit(0);
+
+	}
+}

@@ -44,8 +44,8 @@ public class Game {
 	private ArrayList<Double> targetX;
 	private ArrayList<Double> targetY;
 	
-	private static Scanner sc;
-
+	private String result;
+	
 	public Game(){
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
@@ -57,8 +57,8 @@ public class Game {
 		width = 20;
 		
 		df = new DecimalFormat("#.###");
-		
-		sc = new Scanner(System.in);
+				
+		result = "";
 	}
 	
 	public void newTarget(){
@@ -165,19 +165,16 @@ public class Game {
 	 */
 	public static void main(String[] args){
 		Game game = new Game();
-		double input;
 		boolean win = false;
 		game.newTarget();
 		
 		while(!win){
-			System.out.print("Please enter a velocity: ");
-			input = Double.parseDouble(sc.nextLine());
-			System.out.println("Entered velocity: " + input);
-			game.throwBall(input, game.gravity);
+			game.throwBall(game.velocityX, game.velocityY);
 			if(game.hitTarget()){
-				System.out.println("nice\n");
 				win = true;
+				game.result = "YOU hit the target!";
 			}
+			game.result = "Sorry try again";
 		}
 	}
 	
@@ -211,5 +208,17 @@ public class Game {
 	 */
 	public ArrayList<Double> getPathY(){
 		return pathY;
-	}	
+	}
+	
+	public void setVelX(double x){
+		velocityX = x;
+	}
+	
+	public void setVelY(double y){
+		velocityY = y;
+	}
+	
+	public String getResult(){
+		return result;
+	}
 }
