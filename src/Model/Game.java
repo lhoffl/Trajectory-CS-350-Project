@@ -3,18 +3,27 @@ package Model;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
+/**
+ * Trajectory! - does stuff
+ * 
+ * @author Matthew Hoffman, Ian Mohr, David Fletcher
+ * @version 10/6/2015
+ */
 public class Game {
 
 	private final double gravity = 9.8;
 	
+	// current ball position
 	private double positionX = 0.0;
 	private double positionY = 0.0;
 	
+	// current ball velocity
 	private double velocityX = 0.0;
 	private double velocityY = 10.0;
-		
-	private static double changeInTime = 0.01;
+	
+	private final double changeInTime = 0.01;
 	
 	private boolean inMotion = true;
 	
@@ -26,15 +35,16 @@ public class Game {
 	// ArrayLists for storing the final path of the ball
 	private ArrayList<Double> pathX;
 	private ArrayList<Double> pathY;
-	
 
 	// Dimensions of the board
 	private int width;
-	private int height;
+	//private int height;
 	
 	// ArrayLists for storing the entire target area
 	private ArrayList<Double> targetX;
 	private ArrayList<Double> targetY;
+	
+	private static Scanner sc;
 
 	public Game(){
 		pathX = new ArrayList<Double>();
@@ -43,10 +53,12 @@ public class Game {
 		targetX = new ArrayList<Double>();
 		targetY = new ArrayList<Double>();
 		
-		height = 20;
+		//height = 20;
 		width = 20;
 		
 		df = new DecimalFormat("#.###");
+		
+		sc = new Scanner(System.in);
 	}
 	
 	public void newTarget(){
@@ -60,9 +72,13 @@ public class Game {
 		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 		
+		// reset the target area
+		targetX.clear();
+		targetY.clear();
+		
 		//test point
-//		tempX = 20;
-//		tempY = 0;
+		tempX = 20;
+		tempY = 0;
 		
 		// Calculate target area 
 		for(int i = 0; i < 100; i++){
@@ -94,7 +110,7 @@ public class Game {
 				}
 				
 				// the target was hit
-				if(checkX&&checkY){
+				if(checkX && checkY){
 					return true;
 				}
 			}
@@ -109,6 +125,14 @@ public class Game {
 		positionY = 0;
 		velocityX = velX;
 		velocityY = velY;
+		
+		// empty a path if one existed 
+		pathX.clear();
+		pathY.clear();
+		
+		// reset counters and motion
+		bounceCounter = 0;
+		inMotion = true;
 		
 		while (inMotion) {
 			
@@ -136,24 +160,20 @@ public class Game {
 		}
 	}
 	
-	public ArrayList<Double> getTargetX(){
-		return targetX;
-	}
-	
-	public ArrayList<Double> getPathX(){
-		return pathX;
-	}
-	
-	// run the game
+	/**
+	 * 
+	 */
 	public static void main(String[] args){
 		Game game = new Game();
-				
+		double input;
 		boolean win = false;
 		game.newTarget();
 		
 		while(!win){
-			//test data
-			game.throwBall(5, 9.8);
+			System.out.print("Please enter a velocity: ");
+			input = Double.parseDouble(sc.nextLine());
+			System.out.println("Entered velocity: " + input);
+			game.throwBall(input, game.gravity);
 			if(game.hitTarget()){
 				System.out.println("nice\n");
 				win = true;
@@ -161,4 +181,35 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return targetX
+	 */
+	public ArrayList<Double> getTargetX(){
+		return targetX;
+	}
+	
+	/**
+	 * 
+	 * @return pathX
+	 */
+	public ArrayList<Double> getPathX(){
+		return pathX;
+	}
+	
+	/**
+	 * 
+	 * @return targetY
+	 */
+	public ArrayList<Double> getTargetY(){
+		return targetY;
+	}
+	
+	/**
+	 * 
+	 * @return pathY
+	 */
+	public ArrayList<Double> getPathY(){
+		return pathY;
+	}	
 }
