@@ -38,7 +38,7 @@ public class Game {
 
 	// Dimensions of the board
 	private int width;
-	//private int height;
+	private int height;
 	
 	// ArrayLists for storing the entire target area
 	private ArrayList<Double> targetX;
@@ -58,13 +58,17 @@ public class Game {
 		//height = 20;
 		width = 20;
 		df = new DecimalFormat("#.###");
-		this.newTarget();
 		sc = new Scanner(System.in);
+		
+		this.newTarget();
 				
 		result = "";
 	}
 	
 	public void newTarget(){
+		
+		targetX.clear();
+		targetY.clear();
 		
 		Random rand = new Random();
 		
@@ -91,9 +95,8 @@ public class Game {
 				
 				//modify current location
 				tempX += 0.01;
-				if(test){
+				if(test)
 					tempY -= 0.01;
-				}
 				else
 					tempY += 0.01;
 				
@@ -101,7 +104,6 @@ public class Game {
 				targetX.add(tempX);
 				targetY.add(tempY);
 		}
-
 	}
 	
 	// did you hit the target?
@@ -121,55 +123,61 @@ public class Game {
 				}
 				
 				// the target was hit
-				if(checkX && checkY){
-					return true;
-				}
+				if(checkX && checkY) return true;
+				
 			}
 		}
 		return false;
 	}
 	
 	public void throwBall(double velX, double velY) {
-		
-		//initialize starting position and velocity
-		positionX = 0;
-		positionY = 0;
-		velocityX = velX;
-		velocityY = velY;
-		
-		// empty a path if one existed 
-		pathX.clear();
-		pathY.clear();
-		
-		// reset counters and motion
-		bounceCounter = 0;
-		inMotion = true;
-		
-		while (inMotion) {
+	
+	
+			//initialize starting position and velocity
+			positionX = 0;
+			positionY = 0;
+			velocityX = velX;
+			velocityY = velY;
 			
-			//bounce and update
-			if (positionY < 0){	
-				velocityY = -velocityY;
-				bounceCounter++;
-			}
-						
-			//velocityX = velocityX			This will only change in air resistance
+			// empty a path if one existed 
+			pathX.clear();
+			pathY.clear();
 			
-			//update velocity and position over time
-			velocityY = velocityY - (gravity * changeInTime);
-			positionX += velocityX * changeInTime;  //consider bouncing later
-			positionY += (velocityY * changeInTime) - (1/2)*(gravity * (Math.pow(changeInTime, 2)));
-		
-			//stop the ball
-			if (bounceCounter > maxBounce) {
-				inMotion = false;
-			}
+			// reset counters and motion
+			bounceCounter = 0;
+			inMotion = true;
 			
-			//update path of the ball
-			pathX.add(positionX);
-			pathY.add(positionY);			
+			while (inMotion) {
+				
+				//bounce and update
+				if (positionY < 0){	
+					velocityY = -velocityY;
+					bounceCounter++;
+				}
+							
+				//velocityX = velocityX			This will only change in air resistance
+				
+				//update velocity and position over time
+				velocityY = velocityY - (gravity * changeInTime);
+				positionX += velocityX * changeInTime;  //consider bouncing later
+				positionY += (velocityY * changeInTime) - (1/2)*(gravity * (Math.pow(changeInTime, 2)));
+			
+				//stop the ball
+				if (bounceCounter > maxBounce) {
+					inMotion = false;
+				}
+				
+				//update path of the ball
+				pathX.add(positionX);
+				pathY.add(positionY);			
+			}			
 		}
+	
+	public static void main(String args[]){
+		Game game = new Game();
+		game.newTarget();
 	}
+	
 	
 	/**
 	 * 
@@ -209,6 +217,22 @@ public class Game {
 	
 	public void setVelY(double y){
 		velocityY = y;
+	}
+	
+	public double getVelX(){
+		return velocityX;
+	}
+	
+	public double getVelY(){
+		return velocityY;
+	}
+	
+	public double getHeight(){
+		return height;
+	}
+	
+	public double getWidth(){
+		return width;
 	}
 	
 	public String getResult(){

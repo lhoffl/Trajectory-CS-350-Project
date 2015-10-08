@@ -127,7 +127,7 @@ public class GUI extends JFrame implements ActionListener{
 					newGame();
 				}
 			}catch(NumberFormatException n){
-				
+				JOptionPane.showMessageDialog(panel, "Please enter a double value");
 			}
 			xField.setText("");
 			yField.setText("");
