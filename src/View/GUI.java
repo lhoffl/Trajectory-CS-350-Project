@@ -17,8 +17,14 @@ import javax.swing.JTextField;
 
 import Model.Game;
 
+/**
+ * GUI class for the Trajectory game
+ * 
+ * @author Matthew Hoffman, Ian Mohr, David Fletcher
+ * @version Release One | 10/9/2015
+ */
 public class GUI extends JFrame implements ActionListener{
-
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JPanel panelNorth;
@@ -27,8 +33,8 @@ public class GUI extends JFrame implements ActionListener{
 	private JLabel xVel;
 	private JLabel yVel;
 	private JLabel numOfTurns;
+	private JLabel score;
 	private JLabel targetLocation;
-	private JLabel result;
 	private JTextField xField;
 	private JTextField yField;
 	private JMenuItem reset;
@@ -38,12 +44,11 @@ public class GUI extends JFrame implements ActionListener{
 	private Game game;
 	private int numTurns;
 
-
 	public GUI(){
 		game = new Game();
 		panel = new JPanel();
 		panelNorth = new JPanel();
-		panelSouth = new JPanel(new GridLayout(3,0));
+		panelSouth = new JPanel(new GridLayout(4,0));
 		fire = new JButton("Fire!");
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
@@ -53,7 +58,7 @@ public class GUI extends JFrame implements ActionListener{
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
 		targetLocation = new JLabel("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
-		result = new JLabel("");
+		score = new JLabel("Score: " + game.getScore());
 		xField = new JTextField(5);
 		yField = new JTextField(5);
 		numTurns = 0;
@@ -73,7 +78,7 @@ public class GUI extends JFrame implements ActionListener{
 		panelNorth.add(fire);
 		panelSouth.add(targetLocation);
 		panelSouth.add(numOfTurns);
-		panelSouth.add(result);
+		panelSouth.add(score);
 
 		setJMenuBar(bar);
 		
@@ -86,15 +91,27 @@ public class GUI extends JFrame implements ActionListener{
 		fire.addActionListener(this);
 		reset.addActionListener(this);
 		exit.addActionListener(this);
-		game.newTarget();
 	}
+	
+	/**
+	 * Create a new game
+	 */
 	private void newGame() {
-		game.newTarget();
 		numTurns = 0;
+		game.resetScore();
+		nextTarget();
+	}
+	
+	/**
+	 * Create a new target and reset text fields
+	 */
+	private void nextTarget() {
+		game.newTarget();
 		numOfTurns.setText("Number of Shots: " + numTurns);
 		targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 		xField.setText("");
 		yField.setText("");
+		score.setText("Score: " + game.getScore());
 	}
 
 	@Override
@@ -103,28 +120,35 @@ public class GUI extends JFrame implements ActionListener{
 		JComponent e = (JComponent)event.getSource();
 
 		if(e == fire){
+			//Validate input
 			try{
+				// retrieve the user's input velocities
 				double xVal = Double.parseDouble(xField.getText());
 				double yVal = Double.parseDouble(yField.getText());
 				
+				// If the input is negative, set it to 0
 				if(xVal < 0 || yVal < 0){
 					xVal = 0;
 					yVal = 0;
-					result.setText("U SUCK");
-				}else{
-					result.setText("");
 				}
 				
+				// set the values of the velocities
 				game.setVelX(xVal);
 				game.setVelY(yVal);
 				
+				// throw the ball
 				game.throwBall(xVal, yVal);
 				numTurns++;
+				
+				//update game info
 				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 				numOfTurns.setText("Number of Shots: " + numTurns);
+				
+				// if the target was hit, let the user know, update the score and generate a new target
 				if(game.hitTarget()){
 					JOptionPane.showMessageDialog(panel, "You hit the target!");
-					newGame();
+					score.setText("Score: " + game.getScore());
+					nextTarget();
 				}
 			}catch(NumberFormatException n){
 				JOptionPane.showMessageDialog(panel, "Please enter a double value");
