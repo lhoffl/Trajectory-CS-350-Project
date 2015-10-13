@@ -74,6 +74,45 @@ public class test {
 		}
 	}
 	
+	@Test
+	public void testGetHeight(){
+		Game game = new Game();
+		game.newTarget();
+		double testHeight = game.getHeight();
+		assertTrue(testHeight == 20);
+	}
+
+	@Test
+	public void testGetWidth(){
+		Game game = new Game();
+		game.newTarget();
+		double testWidth = game.getWidth();
+		assertTrue(testWidth == 20);
+	}
+
+	@Test
+	public void testGetVelX(){
+		Game game = new Game();
+		game.setVelX(10);
+		double newVel = game.getVelX();
+		assertTrue(newVel == 10);
+	}
+
+	@Test
+	public void testGetVelY(){
+		Game game = new Game();
+		game.setVelY(10);
+		double newVelY = game.getVelY();
+		assertTrue(newVelY == 10.0);
+	}
+
+	@Test
+	public void testScore(){
+		Game game = new Game();
+		game.resetScore();
+		assertTrue(game.getScore() == 0);
+	}
+	
 	
 
 }
