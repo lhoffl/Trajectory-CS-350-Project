@@ -173,6 +173,27 @@ public class Game {
 		return false;
 	}
 	
+	// ???
+	public boolean targetContains(double x, double y){
+		
+		for(int i = 0; i < targetX.size(); i++){
+			boolean checkX = false, checkY = false;
+			
+		    //covert points to 3 decimal places and check if the target was hit
+			if(Math.abs(Double.parseDouble(df.format(x)) - Double.parseDouble(df.format(targetX.get(i)))) <= 0.1)
+				checkX = true;
+			
+			if(Math.abs(Double.parseDouble(df.format(y)) - Double.parseDouble(df.format(targetY.get(i)))) <= 0.1)
+				checkY = true;
+			
+			// the target was hit
+			if(checkX && checkY)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Function that converts user input double variables into the X and Y velocities of the ball
 	 * @param velX, the ball's X velocity
@@ -224,6 +245,11 @@ public class Game {
 	 * Returns the current X starting point of the target
 	 * @return targetX
 	 */
+	public double getTargetX(int i){
+		return targetX.get(i);
+		//return df.format(targetX.get(0));
+	}
+	
 	public String getTargetX(){
 		return df.format(targetX.get(0));
 	}
@@ -232,14 +258,25 @@ public class Game {
 	 * Returns the current X path of the ball
 	 * @return pathX
 	 */
-	public ArrayList<Double> getPathX(){
-		return pathX;
+	public double getPathX(int i){
+		if(i < getPathSize())
+			return pathX.get(i);
+		return 0;
+	}
+	
+	public int getPathSize(){
+		return pathX.size();
 	}
 	
 	/**
 	 * Returns the current Y starting point of the target
 	 * @return targetY
 	 */
+	public double getTargetY(int i){
+		return targetY.get(i);
+		//return df.format(targetY.get(0));
+	}
+	
 	public String getTargetY(){
 		return df.format(targetY.get(0));
 	}
@@ -248,8 +285,10 @@ public class Game {
 	 * Returns the current Y path of the ball
 	 * @return pathY
 	 */
-	public ArrayList<Double> getPathY(){
-		return pathY;
+	public double getPathY(int i){
+		if(i < getPathSize())
+			return pathY.get(i);
+		return 0;
 	}
 	
 	/**
@@ -288,7 +327,7 @@ public class Game {
 	 * Returns the current height of the board
 	 * @return height
 	 */
-	public double getHeight(){
+	public int getHeight(){
 		return height;
 	}
 	
@@ -296,7 +335,7 @@ public class Game {
 	 * Returns the current width of the board
 	 * @return width
 	 */
-	public double getWidth(){
+	public int getWidth(){
 		return width;
 	}
 	
@@ -314,4 +353,5 @@ public class Game {
 	public void resetScore(){
 		score = 0;
 	}
+	
 }

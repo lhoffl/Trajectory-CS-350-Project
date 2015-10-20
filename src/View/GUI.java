@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +44,8 @@ public class GUI extends JFrame implements ActionListener{
 	private JMenu file;
 	private Game game;
 	private int numTurns;
-
+	private TrajectoryPanel trajPanel;
+	
 	public GUI(){
 		game = new Game();
 		panel = new JPanel();
@@ -61,13 +63,16 @@ public class GUI extends JFrame implements ActionListener{
 		score = new JLabel("Score: " + game.getScore());
 		xField = new JTextField(5);
 		yField = new JTextField(5);
+		trajPanel = new TrajectoryPanel();
 		numTurns = 0;
 
 		bar.add(file);
 		file.add(reset);
 		file.add(exit);
-
-		add(panel);
+		
+		setLayout(new BorderLayout());
+		
+		add(panel, BorderLayout.NORTH);
 		panel.add(panelNorth);
 		panel.add(panelSouth);
 		panel.add(bar);
@@ -81,8 +86,10 @@ public class GUI extends JFrame implements ActionListener{
 		panelSouth.add(score);
 
 		setJMenuBar(bar);
+		trajPanel.setGame(game);
+		add(trajPanel, BorderLayout.SOUTH);
 		
-		setSize(350,150);
+		pack();
 		setTitle("Trajectory!");
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -100,6 +107,9 @@ public class GUI extends JFrame implements ActionListener{
 		numTurns = 0;
 		game.resetScore();
 		nextTarget();
+		trajPanel.removeAll();
+		trajPanel.resetVelocities();
+		trajPanel.updateUI();
 	}
 	
 	/**
@@ -112,6 +122,9 @@ public class GUI extends JFrame implements ActionListener{
 		xField.setText("");
 		yField.setText("");
 		score.setText("Score: " + game.getScore());
+		trajPanel.removeAll();
+		trajPanel.resetVelocities();
+		trajPanel.updateUI();
 	}
 
 	@Override
@@ -120,6 +133,11 @@ public class GUI extends JFrame implements ActionListener{
 		JComponent e = (JComponent)event.getSource();
 
 		if(e == fire){
+			
+			trajPanel.removeAll();
+			trajPanel.resetVelocities();
+			
+			
 			//Validate input
 			try{
 				// retrieve the user's input velocities
@@ -138,11 +156,16 @@ public class GUI extends JFrame implements ActionListener{
 				
 				// throw the ball
 				game.throwBall(xVal, yVal);
+				trajPanel.setGame(game);
 				numTurns++;
 				
 				//update game info
 				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 				numOfTurns.setText("Number of Shots: " + numTurns);
+				
+				// fuck
+				trajPanel.changeTime(10);
+				trajPanel.changeVel(xVal, yVal);
 				
 				// if the target was hit, let the user know, update the score and generate a new target
 				if(game.hitTarget()){

@@ -20,18 +20,17 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 	private double velY;
 	private double currTime;
 	private final double gravity = 9.8;
-	private Game game = new Game();
 	private Random rand = new Random();
 	private int n;
+	
+	private Game game;
 
 	//Fucking around
 	Timer time = new Timer(5, this);
 	int x = 0, speed = 1;
 
 	public TrajectoryPanel(){
-
-		setPreferredSize(new Dimension(100,100));
-		n = rand.nextInt(90) + 250;
+		setPreferredSize(new Dimension(100, 100));
 	}
 
 	@Override
@@ -53,41 +52,63 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		g.setColor(Color.BLUE);
 		g2d.drawLine(0,0,getWidth(),0);
 
-		//tank
-		g.setColor(Color.GREEN);
-		g2d.fillRect(0, 90, 20, 10);
-
-		//target
-		g.setColor(Color.RED);
-		g2d.fillRect(n, x, 10, 10);
+		for(int i = 0; i < getWidth(); i += 50){
+			g.setColor(Color.GREEN);
+			g2d.fillRect(i, 90, 10, 10);
+		}
+		
 		//time.start();
 
 		g.setColor(Color.BLACK);
 
 		AffineTransform old = g2d.getTransform();
+	
 
+		int index = 0;
 		for(double t = 0.0; t < currTime; t+=.01){
-
+			
 			//sets 0,0 to bottom left
-			g2d.translate(20, getHeight()-10);
+			g2d.translate(0, getHeight()-10);
 			g2d.scale(1, -1);getLayout();
-			/*currX = velX * t;  //consider bouncing later
-			currY = (velY * t) - (1/2)*(9.8 * (Math.pow(t, 2)));*/
 
-			//formula from our game class
-			velY = velY - (gravity * .01);
-			currX += velX * .01;  //consider bouncing later
-			currY += (velY * .01) - (1/2)*(gravity * (Math.pow(.01, 2)));
-
-			g2d.drawLine((int)prevX, (int)prevY, (int)currX, (int)currY);
-			//System.out.println(" CurrX: " + currX + " CurrY: " + currY + " velX: " + velX + " velY: " + velY);
+			
+//			//target
+		    g.setColor(Color.RED);
+			g2d.fillRect((int)(game.getTargetX(0)), (int)(game.getTargetY(0)), 10, 10);
+			g.setColor(Color.BLACK);
+			
+			if (index < game.getPathSize()){
+				prevX = game.getPathX(index);
+				prevY = game.getPathY(index);
+			}
+			
+			index++;
+			
+			if (index < game.getPathSize()){
+				currX = game.getPathX(index+1);
+				currY = game.getPathY(index+1);
+			}
+			else{
+				currX = prevX;
+				currY = prevY;
+			}
+			
+		//	System.out.printf("index: %d,pX: %f, pY: %f, cX: %f, cY: %f\n",index,prevX,prevY,currX,currY);
+//			if(index < game.getPathX().size())
+//				System.out.printf("paX: %f, paY: %f\n", game.getPathX().get(index), game.getPathY().get(index));
+			// if the target is not hit, draw the path
+			if(!game.targetContains(currX, currY) && index < game.getPathSize() - 1){
+				g2d.drawLine((int)game.getPathX(index), (int)prevY, (int)game.getPathX(index+1), (int)currY);
+			}
+			
 			g2d.setTransform(old);
-
 			//new starting points for next iteration
+			
 			prevX = currX;
 			prevY = currY;
-
 		}
+		
+		index = 0;
 	}
 
 	public void changeTime(double chTime){
@@ -118,6 +139,10 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		x = x + speed;
 		repaint();
 
+	}
+	
+	public void setGame(Game g){
+		game = g;
 	}
 
 }
