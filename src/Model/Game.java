@@ -76,8 +76,8 @@ public class Game {
 		targetY = new ArrayList<Double>();
 		
 		//set the default 'board' area
-		height = 20;
-		width = 20;
+		height = 100;
+		width = 500;
 		
 		//instantiate the decimal format for the doubles
 		df = new DecimalFormat("#.###");
@@ -156,10 +156,10 @@ public class Game {
 				boolean checkX = false, checkY = false;
 				
 			    //covert points to 3 decimal places and check if the target was hit
-				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.1)
+				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.5)
 					checkX = true;
 				
-				if(Math.abs(Double.parseDouble(df.format(pathY.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.1)
+				if(Math.abs(Double.parseDouble(df.format(pathY.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.5)
 					checkY = true;
 				
 				// the target was hit
