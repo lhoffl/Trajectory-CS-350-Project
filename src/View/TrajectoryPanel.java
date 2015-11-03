@@ -127,6 +127,9 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 
 		velX = 0.0;
 		velY = 0.0;
+		this.removeAll();
+		this.updateUI();
+		
 	}
 
 	//only for moving target

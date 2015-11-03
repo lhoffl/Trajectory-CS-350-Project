@@ -347,6 +347,11 @@ public class Game {
 		return score;
 	}
 	
+	public void resetPath(){
+		pathX = new ArrayList<Double>();
+		pathY = new ArrayList<Double>();
+	}
+	
 	/**
 	 * Reset the game score to 0
 	 */

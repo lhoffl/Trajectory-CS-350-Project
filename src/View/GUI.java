@@ -48,6 +48,7 @@ public class GUI extends JFrame implements ActionListener{
 	private Game game;
 	private int numTurns;
 	private TrajectoryPanel trajPanel;
+	private TrajectoryPanel airPanel;
 	private InitializePlanet iPlanet;
 	private Planet p;
 	
@@ -72,6 +73,7 @@ public class GUI extends JFrame implements ActionListener{
 		xField = new JTextField(5);
 		yField = new JTextField(5);
 		trajPanel = new TrajectoryPanel();
+		airPanel = new TrajectoryPanel();
 		numTurns = 0;
 
 		bar.add(file);
@@ -97,7 +99,9 @@ public class GUI extends JFrame implements ActionListener{
 
 		setJMenuBar(bar);
 		trajPanel.setGame(game);
+		airPanel.setGame(game);
 		add(trajPanel, BorderLayout.SOUTH);
+		add(airPanel, BorderLayout.CENTER);
 		
 		pack();
 		setTitle("Trajectory!");
@@ -112,6 +116,16 @@ public class GUI extends JFrame implements ActionListener{
 
 	}
 	
+	private void resetPanels(){
+		trajPanel.removeAll();
+		trajPanel.resetVelocities();
+		trajPanel.updateUI();
+		
+		airPanel.removeAll();
+		airPanel.resetVelocities();
+		airPanel.updateUI();
+	}
+	
 	/**
 	 * Create a new game
 	 */
@@ -119,9 +133,6 @@ public class GUI extends JFrame implements ActionListener{
 		numTurns = 0;
 		game.resetScore();
 		nextTarget();
-		trajPanel.removeAll();
-		trajPanel.resetVelocities();
-		trajPanel.updateUI();
 	}
 	
 	/**
@@ -134,9 +145,7 @@ public class GUI extends JFrame implements ActionListener{
 		xField.setText("");
 		yField.setText("");
 		score.setText("Score: " + game.getScore());
-		trajPanel.removeAll();
 		trajPanel.resetVelocities();
-		trajPanel.updateUI();
 	}
 
 	@Override
@@ -146,8 +155,7 @@ public class GUI extends JFrame implements ActionListener{
 
 		if(e == fire){
 			
-			trajPanel.removeAll();
-			trajPanel.resetVelocities();
+			resetPanels();
 			
 			
 			//Validate input
@@ -183,7 +191,9 @@ public class GUI extends JFrame implements ActionListener{
 				if(game.hitTarget()){
 					JOptionPane.showMessageDialog(panel, "You hit the target!");
 					score.setText("Score: " + game.getScore());
+					game.resetPath();
 					nextTarget();
+					resetPanels();
 				}
 			}catch(NumberFormatException n){
 				JOptionPane.showMessageDialog(panel, "Please enter a double value");
@@ -202,6 +212,7 @@ public class GUI extends JFrame implements ActionListener{
 			p = iPlanet.getPlanet();
 			game.setGravity(p.getGravity());
 			trajPanel.setBackground(p.getColor());
+			airPanel.setBackground(p.getColor());
 			System.out.printf("Planet: %s, gravity: %f\n", p.toString(), p.getGravity());
 		}
 
