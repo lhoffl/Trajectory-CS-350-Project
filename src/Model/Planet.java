@@ -19,12 +19,26 @@ public enum Planet {
 	private final boolean atmosphere;
 	private final Image background;
 	
-	PlanetType(double surfaceGravity, boolean atmosphere, Image background){
+	Planet(double surfaceGravity, boolean atmosphere, Image background){
 		this.surfaceGravity = surfaceGravity;
 		this.atmosphere = atmosphere;
 		this.background = background;
 	}
 	
+	Planet(){
+		surfaceGravity = 0.0;
+		atmosphere = false;
+		background = null;
+	}
+	
+	public double getGravity(){
+		return surfaceGravity;
+	}
+	
+	@Override
+	public String toString(){
+		return name();
+	}
 	
 }
 	
