@@ -48,7 +48,7 @@ public class GUI extends JFrame implements ActionListener{
 	private Game game;
 	private int numTurns;
 	private TrajectoryPanel trajPanel;
-	private TrajectoryPanel airPanel;
+	private AirPanel airPanel;
 	private InitializePlanet iPlanet;
 	private Planet p;
 	
@@ -73,7 +73,7 @@ public class GUI extends JFrame implements ActionListener{
 		xField = new JTextField(5);
 		yField = new JTextField(5);
 		trajPanel = new TrajectoryPanel();
-		airPanel = new TrajectoryPanel();
+		airPanel = new AirPanel();
 		numTurns = 0;
 
 		bar.add(file);
@@ -120,10 +120,10 @@ public class GUI extends JFrame implements ActionListener{
 		trajPanel.removeAll();
 		trajPanel.resetVelocities();
 		trajPanel.updateUI();
-		
 		airPanel.removeAll();
 		airPanel.resetVelocities();
 		airPanel.updateUI();
+		game.resetPath();
 	}
 	
 	/**
@@ -146,6 +146,7 @@ public class GUI extends JFrame implements ActionListener{
 		yField.setText("");
 		score.setText("Score: " + game.getScore());
 		trajPanel.resetVelocities();
+		airPanel.resetVelocities();
 	}
 
 	@Override
@@ -156,7 +157,6 @@ public class GUI extends JFrame implements ActionListener{
 		if(e == fire){
 			
 			resetPanels();
-			
 			
 			//Validate input
 			try{
@@ -176,7 +176,10 @@ public class GUI extends JFrame implements ActionListener{
 				
 				// throw the ball
 				game.throwBall(xVal, yVal);
+				game.throwBall(xVal, yVal, 250, 0.5);
 				trajPanel.setGame(game);
+				airPanel.setGame(game);
+
 				numTurns++;
 				
 				//update game info
@@ -186,6 +189,9 @@ public class GUI extends JFrame implements ActionListener{
 				// fuck
 				trajPanel.changeTime(10);
 				trajPanel.changeVel(xVal, yVal);
+				
+				airPanel.changeTime(10);
+				airPanel.changeVel(xVal, yVal);
 				
 				// if the target was hit, let the user know, update the score and generate a new target
 				if(game.hitTarget()){

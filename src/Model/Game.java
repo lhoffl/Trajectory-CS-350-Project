@@ -28,7 +28,7 @@ public class Game {
 	private double velocityY = 10.0;
 	
 	/* constant used to calculate velocities */
-	private final double changeInTime = 0.01;
+	private double changeInTime = 0.01;
 	
 	/* is the ball currently moving */
 	private boolean inMotion = true;
@@ -47,6 +47,12 @@ public class Game {
 	
 	/* contains all the Y positions the ball traveled through */
 	private ArrayList<Double> pathY;
+	
+	/* contains all the X positions the ball traveled through */
+	private ArrayList<Double> pathXAir;
+	
+	/* contains all the Y positions the ball traveled through */
+	private ArrayList<Double> pathYAir;
 
 	/* the width of the 'board' area */
 	private int width;
@@ -70,6 +76,10 @@ public class Game {
 		// instantiate the path array lists
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
+		
+		// instantiate the path array lists
+		pathXAir = new ArrayList<Double>();
+		pathYAir = new ArrayList<Double>();
 		
 		// instantiate the target array lists
 		targetX = new ArrayList<Double>();
@@ -148,20 +158,34 @@ public class Game {
 	 */
 	public boolean hitTarget(){
 		
+		int size;
+		if(pathX.size() > pathXAir.size()){
+			size = pathX.size();
+		}
+		else{
+			size = pathXAir.size();
+		}
 		// Look through all the possible path values
-		for(int i = 0; i < pathX.size(); i++){
+		for(int i = 0; i < size; i++){
 			// Look through all the target area
 			for(int j = 0; j < targetX.size(); j++){
 				
 				boolean checkX = false, checkY = false;
 				
 			    //covert points to 3 decimal places and check if the target was hit
-				if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.5)
-					checkX = true;
-				
-				if(Math.abs(Double.parseDouble(df.format(pathY.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.5)
-					checkY = true;
-				
+				if(size <= pathX.size()){
+					if(Math.abs(Double.parseDouble(df.format(pathX.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.5)
+						checkX = true;
+					if(Math.abs(Double.parseDouble(df.format(pathY.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.5)
+						checkY = true;
+				}
+				if(size <= pathXAir.size()){
+					if(Math.abs(Double.parseDouble(df.format(pathXAir.get(i))) - Double.parseDouble(df.format(targetX.get(j)))) <= 0.5)
+						checkX = true;
+					if(Math.abs(Double.parseDouble(df.format(pathYAir.get(i))) - Double.parseDouble(df.format(targetY.get(j)))) <= 0.5)
+						checkY = true;
+				}
+			
 				// the target was hit
 				if(checkX && checkY){
 					score++;
@@ -169,6 +193,7 @@ public class Game {
 				}
 			}
 		}
+		
 		// the target was not hit
 		return false;
 	}
@@ -215,7 +240,7 @@ public class Game {
 			bounceCounter = 0;
 			inMotion = true;
 			
-			while (inMotion) {
+			while (inMotion && positionX < width) {
 				
 				//bounce and update
 				if (positionY < 0){	
@@ -240,6 +265,51 @@ public class Game {
 				pathY.add(positionY);			
 			}			
 		}
+	
+	public void throwBall(double velX, double velY, double mass, double diameter){
+
+		int force = 1000;
+		double time = 0.0;
+		changeInTime = 0.01;
+		double initialX = 0.0;
+		double initialY = 0.0;
+		velocityX = velX;
+		velocityY = velY;
+		
+		double accelerationX = 0.0;
+		double accelerationY = 0.0;
+		System.out.println("Mass: " + mass);
+		System.out.println("Diameter: " + diameter);
+
+		double linearDrag = (1.6 * Math.pow(10,-4)) * diameter;
+		double quadDrag = 0.25 * (Math.pow(diameter,2));
+
+		for(int i = 0; i < force; i++){
+
+			//Iterate time
+			time += changeInTime;
+
+			//Calculate accelerations
+			accelerationX = -(linearDrag/mass)*velX-(quadDrag/mass)*velX*Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+			accelerationY = -gravity-(linearDrag/mass)*velY-(quadDrag/mass)*velY*Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+
+			//Calculate new velocities
+			velX += accelerationX * changeInTime;
+			velY += accelerationY * changeInTime;
+
+			//Calculate the new positions
+			initialX += velX * changeInTime;
+			initialY += velY * changeInTime;
+			
+			pathXAir.add(initialX);
+			pathYAir.add(initialY);
+			System.out.printf("%d, x: %f, y: %f\n", i, initialX, initialY);
+			
+			if(initialY <= 0 || initialX > width){
+				break;
+			}
+		}
+	}
 	
 	/**
 	 * Returns the current X starting point of the target
@@ -288,6 +358,24 @@ public class Game {
 	public double getPathY(int i){
 		if(i < getPathSize())
 			return pathY.get(i);
+		return 0;
+	}
+	
+
+	public int getPathSizeAir() {
+		return pathXAir.size();
+	}
+
+	public double getPathXAir(int i) {
+		if(i < getPathSizeAir())
+			return pathXAir.get(i);
+		return 0;
+	}
+
+	public double getPathYAir(int i) {
+		if(i < getPathSizeAir()){
+			return pathYAir.get(i);
+		}
 		return 0;
 	}
 	
@@ -350,6 +438,9 @@ public class Game {
 	public void resetPath(){
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
+		
+		pathXAir = new ArrayList<Double>();
+		pathYAir = new ArrayList<Double>();
 	}
 	
 	/**
@@ -362,5 +453,22 @@ public class Game {
 	public void setGravity(double gravity){
 		this.gravity = gravity;
 	}
+	
+	public ArrayList<Double> PathX(){
+		return pathX;
+	}
+	
+	public ArrayList<Double> PathY(){
+		return pathX;
+	}
+	
+	public ArrayList<Double> PathXAir(){
+		return pathX;
+	}
+	
+	public ArrayList<Double> PathYAir(){
+		return pathX;
+	}
+
 	
 }

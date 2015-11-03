@@ -97,7 +97,6 @@ public class InitializePlanet extends JDialog implements ActionListener{
 			for(int i = 0; i < planetList.length; i++){
 				if(list.getSelectedItem() == Planet.CUSTOM){
 					p = Planet.CUSTOM;
-					p.setAtmosphere(true);
 					try{
 						p.setGravity(Double.parseDouble(gravityField.getText()));
 					}catch(Exception x){

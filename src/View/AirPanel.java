@@ -15,7 +15,7 @@ import javax.swing.Timer;
 
 import Model.Game;
 
-public class TrajectoryPanel extends JPanel implements ActionListener{
+public class AirPanel extends JPanel implements ActionListener{
 
 	private double velX;
 	private double velY;
@@ -27,7 +27,7 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 	
 	private Game game;
 
-	public TrajectoryPanel(){
+	public AirPanel(){
 		setPreferredSize(new Dimension(100, 100));
 	}
 
@@ -75,24 +75,24 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 			g.setColor(Color.BLACK);
 			
 				
-				if (index < game.getPathSize()){
-					prevX = game.getPathX(index);
-					prevY = game.getPathY(index);
+				if (index < game.getPathSizeAir()){
+					prevX = game.getPathXAir(index);
+					prevY = game.getPathYAir(index);
 				}
 				
 				index++;
 				
-				if (index < game.getPathSize()){
-					currX = game.getPathX(index+1);
-					currY = game.getPathY(index+1);
+				if (index < game.getPathSizeAir()){
+					currX = game.getPathXAir(index+1);
+					currY = game.getPathYAir(index+1);
 				}
 				else{
 					currX = prevX;
 					currY = prevY;
 				}
 				
-				if(!game.targetContains(currX, currY) && index < game.getPathSize() - 1){
-					g2d.drawLine((int)game.getPathX(index), (int)prevY, (int)game.getPathX(index+1), (int)currY);
+				if(!game.targetContains(currX, currY) && index < game.getPathSizeAir() - 1){
+					g2d.drawLine((int)game.getPathXAir(index), (int)prevY, (int)game.getPathXAir(index+1), (int)currY);
 				}
 				
 				g2d.setTransform(old);
