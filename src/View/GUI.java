@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Model.Game;
+import Model.Planet;
 
 /**
  * GUI class for the Trajectory game
@@ -40,22 +41,29 @@ public class GUI extends JFrame implements ActionListener{
 	private JTextField yField;
 	private JMenuItem reset;
 	private JMenuItem exit;
+	private JMenuItem planetSelect;
 	private JMenuBar bar;
 	private JMenu file;
+	private JMenu edit;
 	private Game game;
 	private int numTurns;
 	private TrajectoryPanel trajPanel;
+	private InitializePlanet iPlanet;
+	private Planet p;
 	
 	public GUI(){
 		game = new Game();
+		p = Planet.EARTH;
 		panel = new JPanel();
 		panelNorth = new JPanel();
 		panelSouth = new JPanel(new GridLayout(4,0));
 		fire = new JButton("Fire!");
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
+		planetSelect = new JMenuItem("Select Planet");
 		bar = new JMenuBar();
 		file = new JMenu("File");
+		edit = new JMenu("Edit");
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
@@ -67,8 +75,10 @@ public class GUI extends JFrame implements ActionListener{
 		numTurns = 0;
 
 		bar.add(file);
+		bar.add(edit);
 		file.add(reset);
 		file.add(exit);
+		edit.add(planetSelect);
 		
 		setLayout(new BorderLayout());
 		
@@ -94,10 +104,12 @@ public class GUI extends JFrame implements ActionListener{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-
+				
 		fire.addActionListener(this);
 		reset.addActionListener(this);
 		exit.addActionListener(this);
+		planetSelect.addActionListener(this);
+
 	}
 	
 	/**
@@ -184,6 +196,14 @@ public class GUI extends JFrame implements ActionListener{
 		}
 		if(e == exit)
 			System.exit(0);
+		
+		if(e == planetSelect){
+			iPlanet = new InitializePlanet();
+			p = iPlanet.getPlanet();
+			game.setGravity(p.getGravity());
+			trajPanel.setBackground(p.getColor());
+			System.out.printf("Planet: %s, gravity: %f\n", p.toString(), p.getGravity());
+		}
 
 	}
 }

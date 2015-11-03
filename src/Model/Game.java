@@ -13,7 +13,7 @@ import java.util.Random;
 public class Game {
 	
 	/* the value of gravity on Earth */
-	private final double gravity = 9.8;
+	private double gravity = 9.788;
 	
 	/* the current X position of the ball */
 	private double positionX = 0.0;
@@ -352,6 +352,10 @@ public class Game {
 	 */
 	public void resetScore(){
 		score = 0;
+	}
+	
+	public void setGravity(double gravity){
+		this.gravity = gravity;
 	}
 	
 }

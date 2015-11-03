@@ -30,6 +30,7 @@ public class InitializePlanet extends JDialog implements ActionListener{
 	private double gravity;
 	private Planet[] planetList = {Planet.MERCURY, Planet.VENUS, Planet.EARTH, Planet.MARS,
 					 Planet.JUPITER, Planet.SATURN, Planet.URANUS, Planet.NEPTUNE, Planet.PLUTO, Planet.LUNA, Planet.CUSTOM};
+	Planet p = null;
 	
 	private Game game;
 
@@ -72,6 +73,17 @@ public class InitializePlanet extends JDialog implements ActionListener{
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
+	public Planet getPlanet(){
+		for(int i = 0; i < planetList.length; i++){
+			if(list.getSelectedItem() == planet.CUSTOM){
+			}
+			else if (planetList[i] == list.getSelectedItem()){
+				p = planetList[i];
+			}
+		}
+			return p;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
@@ -80,13 +92,27 @@ public class InitializePlanet extends JDialog implements ActionListener{
 		//Create Planet
 		if(e == create){
 
-			double value = 0;
+			double value = 0.0;
+			String name = "Custom";
 			for(int i = 0; i < planetList.length; i++){
-				if(planetList[i] == list.getSelectedItem()){
+				if(list.getSelectedItem() == Planet.CUSTOM){
+					p = Planet.CUSTOM;
+					p.setAtmosphere(true);
+					try{
+						p.setGravity(Double.parseDouble(gravityField.getText()));
+					}catch(Exception x){
+						p.setGravity(value);
+					}
+					try{
+						p.setName(nameField.getText());
+					}catch(Exception f){
+						p.setName("CUSTOM");
+					}
+				}
+				else if (planetList[i] == list.getSelectedItem()){
 					value = planetList[i].getGravity();
 				}
 			}
-			System.out.println(planet.toString());
 			//game.setGravity(value);
 			dispose();
 		}
@@ -110,9 +136,9 @@ public class InitializePlanet extends JDialog implements ActionListener{
 			for(int i = 0; i < planetList.length; i++){
 				if(planetList[i] == list.getSelectedItem()){
 					gravityField.setText("" + planetList[i].getGravity());
+					nameField.setText(planetList[i].toString());
 				}
 			}
-
 		}
 	}
 
