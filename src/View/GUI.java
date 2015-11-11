@@ -53,7 +53,7 @@ public class GUI extends JFrame implements ActionListener{
 	private Planet p;
 	
 	public GUI(){
-		game = new Game();
+		game = game.getGameObject();
 		p = Planet.EARTH;
 		panel = new JPanel();
 		panelNorth = new JPanel();
@@ -98,8 +98,7 @@ public class GUI extends JFrame implements ActionListener{
 		panelSouth.add(score);
 
 		setJMenuBar(bar);
-		trajPanel.setGame(game);
-		airPanel.setGame(game);
+
 		add(trajPanel, BorderLayout.SOUTH);
 		add(airPanel, BorderLayout.CENTER);
 		
@@ -177,21 +176,12 @@ public class GUI extends JFrame implements ActionListener{
 				// throw the ball
 				game.throwBall(xVal, yVal);
 				game.throwBall(xVal, yVal, 250, 0.5);
-				trajPanel.setGame(game);
-				airPanel.setGame(game);
 
 				numTurns++;
 				
 				//update game info
 				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 				numOfTurns.setText("Number of Shots: " + numTurns);
-				
-				// fuck
-				trajPanel.changeTime(10);
-				trajPanel.changeVel(xVal, yVal);
-				
-				airPanel.changeTime(10);
-				airPanel.changeVel(xVal, yVal);
 				
 				// if the target was hit, let the user know, update the score and generate a new target
 				if(game.hitTarget()){

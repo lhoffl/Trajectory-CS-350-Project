@@ -12,6 +12,8 @@ import java.util.Random;
  */
 public class Game {
 	
+	private static Game game;
+
 	/* the value of gravity on Earth */
 	private double gravity = 9.788;
 	
@@ -97,6 +99,12 @@ public class Game {
 		
 		// reset the score
 		score = 0;
+	}
+	
+	public static Game getGameObject(){
+		if(game == null)
+			game = new Game();
+		return game;
 	}
 	
 	/**
@@ -275,11 +283,11 @@ public class Game {
 		double initialY = 0.0;
 		velocityX = velX;
 		velocityY = velY;
+		pathXAir.clear();
+		pathYAir.clear();
 		
 		double accelerationX = 0.0;
 		double accelerationY = 0.0;
-		System.out.println("Mass: " + mass);
-		System.out.println("Diameter: " + diameter);
 
 		double linearDrag = (1.6 * Math.pow(10,-4)) * diameter;
 		double quadDrag = 0.25 * (Math.pow(diameter,2));
@@ -303,7 +311,6 @@ public class Game {
 			
 			pathXAir.add(initialX);
 			pathYAir.add(initialY);
-			System.out.printf("%d, x: %f, y: %f\n", i, initialX, initialY);
 			
 			if(initialY <= 0 || initialX > width){
 				break;
@@ -317,7 +324,6 @@ public class Game {
 	 */
 	public double getTargetX(int i){
 		return targetX.get(i);
-		//return df.format(targetX.get(0));
 	}
 	
 	public String getTargetX(){
@@ -344,7 +350,6 @@ public class Game {
 	 */
 	public double getTargetY(int i){
 		return targetY.get(i);
-		//return df.format(targetY.get(0));
 	}
 	
 	public String getTargetY(){
