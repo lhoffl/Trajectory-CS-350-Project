@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Trajectory! - a physics based game, where the user aims to hit a random target
+ * Trajectory! - a physics based game, where the user aims to 
+ * hit a random target
  * 
  * @author Matthew Hoffman, Ian Mohr, David Fletcher
- * @version Release One | Last Updated: 10/6/2015
+ * @version Release Two | Last Updated: 11/11/2015
  */
 public class Game {
 	
+	/* Instance of the Game class */
 	private static Game game;
 
 	/* the value of gravity on Earth */
@@ -101,6 +103,9 @@ public class Game {
 		score = 0;
 	}
 	
+	/**
+	 * Creates a new instance of the Game class if there isn't one yet created.
+	 */
 	public static Game getGameObject(){
 		if(game == null)
 			game = new Game();
@@ -116,6 +121,7 @@ public class Game {
 		targetX.clear();
 		targetY.clear();
 		
+		//New random instance
 		Random rand = new Random();
 		
 		// variables used to determine where the target may spawn
@@ -206,9 +212,13 @@ public class Game {
 		return false;
 	}
 	
-	// ???
+	/**
+	 * Function that determines whether or not the target was hit
+	 * @return true if the target contains the arcs path, false otherwise
+	 */
 	public boolean targetContains(double x, double y){
 		
+		//Loops through the target ArrayList
 		for(int i = 0; i < targetX.size(); i++){
 			boolean checkX = false, checkY = false;
 			
@@ -248,6 +258,7 @@ public class Game {
 			bounceCounter = 0;
 			inMotion = true;
 			
+			//While the arc is generating and the arc is still on the screen
 			while (inMotion && positionX < width) {
 				
 				//bounce and update
@@ -274,6 +285,13 @@ public class Game {
 			}			
 		}
 	
+	/**
+	 * Function that converts user input double variables into the X and Y velocities of the ball
+	 * @param velX, the ball's X velocity
+	 * @param velY, the ball's Y velocity
+	 * @param mass, the ball's mass
+	 * @param diameter, the ball's diameter
+	 */
 	public void throwBall(double velX, double velY, double mass, double diameter){
 
 		int force = 1000;
@@ -340,6 +358,10 @@ public class Game {
 		return 0;
 	}
 	
+	/**
+	 * Returns the size of the path
+	 * @return size of path
+	 */
 	public int getPathSize(){
 		return pathX.size();
 	}
@@ -352,6 +374,10 @@ public class Game {
 		return targetY.get(i);
 	}
 	
+	/**
+	 * Returns the location of the target
+	 * @return the target location in String form
+	 */
 	public String getTargetY(){
 		return df.format(targetY.get(0));
 	}
@@ -366,17 +392,28 @@ public class Game {
 		return 0;
 	}
 	
-
+	/**
+	 * Returns the size of the path 
+	 * @return int of path size for air resistance arc
+	 */
 	public int getPathSizeAir() {
 		return pathXAir.size();
 	}
 
+	/**
+	 * Returns the current X path of the ball for air resistance
+	 * @return pathXAir
+	 */
 	public double getPathXAir(int i) {
 		if(i < getPathSizeAir())
 			return pathXAir.get(i);
 		return 0;
 	}
 
+	/**
+	 * Returns the current Y path of the ball for air resistance
+	 * @return pathYAir
+	 */
 	public double getPathYAir(int i) {
 		if(i < getPathSizeAir()){
 			return pathYAir.get(i);
@@ -440,6 +477,9 @@ public class Game {
 		return score;
 	}
 	
+	/**
+	 * Resets the paths for both panels
+	 */
 	public void resetPath(){
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
@@ -455,22 +495,41 @@ public class Game {
 		score = 0;
 	}
 	
+	/**
+	 * Sets the gravity for the algorithms
+	 */
 	public void setGravity(double gravity){
 		this.gravity = gravity;
 	}
 	
+	/**
+	 * Returns the ArrayList that contains the path for X
+	 * @return pathX
+	 */
 	public ArrayList<Double> PathX(){
 		return pathX;
 	}
 	
+	/**
+	 * Returns the ArrayList that contains the path for Y
+	 * @return pathY
+	 */
 	public ArrayList<Double> PathY(){
 		return pathX;
 	}
 	
+	/**
+	 * Returns the ArrayList that contains the path for X
+	 * @return pathXAir
+	 */
 	public ArrayList<Double> PathXAir(){
 		return pathX;
 	}
 	
+	/**
+	 * Returns the ArrayList that contains the path for Y
+	 * @return pathYAir
+	 */
 	public ArrayList<Double> PathYAir(){
 		return pathX;
 	}
