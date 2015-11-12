@@ -126,5 +126,11 @@ public class AirPanel extends JPanel implements ActionListener{
 		this.removeAll();
 		this.updateUI();
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

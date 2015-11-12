@@ -139,5 +139,11 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		this.updateUI();
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

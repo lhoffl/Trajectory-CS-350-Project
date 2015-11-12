@@ -56,38 +56,16 @@ public class test {
 		game.newTarget();
 		
 		game.throwBall(-5, -9.8);
-//		
-//		for(int i = 0; i < game.getPathX().size() - 1; i++){
-//			assertTrue(game.getPathX().get(i) != game.getPathX().get(i+1));
-//		}
-//		
-//		game.throwBall(100, 700);
-//		
-//		for(int i = 0; i < game.getPathX().size() - 1; i++){
-//			assertTrue(game.getPathX().get(i) != game.getPathX().get(i+1));
-//		}
-//		
-//		game.throwBall(0, 0);
-//		
-//		for(int i = 0; i < game.getPathX().size() - 1; i++){
-//			assertTrue(game.getPathX().get(i) != game.getPathX().get(i+1));
-//		}
-	}
-	
-	@Test
-	public void testGetHeight(){
-		Game game = new Game();
-		game.newTarget();
-		double testHeight = game.getHeight();
-		assertTrue(testHeight == 20);
-	}
-
-	@Test
-	public void testGetWidth(){
-		Game game = new Game();
-		game.newTarget();
-		double testWidth = game.getWidth();
-		assertTrue(testWidth == 20);
+		
+		for(int i = 0; i < game.getPathSize() - 1; i++){
+			assertTrue(game.getPathX(i) != game.getPathX(i+1));
+		}
+		
+		game.throwBall(100, 700);
+		
+		for(int i = 0; i < game.getPathSize() - 1; i++){
+			assertTrue(game.getPathX(i) != game.getPathX(i+1));
+		}
 	}
 
 	@Test
@@ -113,6 +91,62 @@ public class test {
 		assertTrue(game.getScore() == 0);
 	}
 	
+	@Test
+	public void testResetPath(){
+		Game game = new Game();
+		game.throwBall(10, 10);
+		game.resetPath();
+		
+		assertTrue(game.getPathSize() == 0);
+	}
 	
-
+	@Test
+	public void airResistanceWorks(){
+			Game game = new Game();
+			
+			game.throwBall(-5, -9.8, 10, 10);
+			
+			for(int i = 0; i < game.getPathSizeAir() - 1; i++){
+				assertTrue(game.getPathXAir(i) != game.getPathXAir(i+1));
+			}
+			
+			game.throwBall(100, 700, 4, 6);
+			
+			for(int i = 0; i < game.getPathSize() - 1; i++){
+				assertTrue(game.getPathXAir(i) != game.getPathXAir(i+1));
+			}
+	}
+	
+	@Test
+	public void planetNameTest(){
+		Planet Mercury = Planet.MERCURY;
+		assertTrue(Mercury.toString().equals("Mercury"));
+		Planet Venus = Planet.VENUS;
+		assertTrue(Venus.toString().equals("Venus"));
+		Planet Earth = Planet.EARTH;
+		assertTrue(Earth.toString().equals("Earth"));
+		Planet Custom = Planet.CUSTOM;
+		Custom.setName("TEST");
+		assertTrue(Custom.toString().equals("TEST"));
+		Custom.setName("AGAIN");
+		assertTrue(Custom.toString().equals("AGAIN"));
+	}
+	
+	@Test
+	public void planetGravityTest(){
+		Planet Mercury = Planet.MERCURY;
+		assertTrue(Mercury.getGravity() == 3.7);
+		Planet Venus = Planet.VENUS;
+		assertTrue(Venus.getGravity() == 8.87);
+		Planet Earth = Planet.EARTH;
+		assertTrue(Earth.getGravity() == 9.788);
+		Planet Custom = Planet.CUSTOM;
+		Custom.setGravity(100);
+		assertTrue(Custom.getGravity() == 100.0);
+		Custom.setGravity(0.5);
+		assertTrue(Custom.getGravity() == 0.5);
+	}
+	
+	
 }
+	

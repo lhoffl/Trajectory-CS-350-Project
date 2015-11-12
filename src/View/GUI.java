@@ -123,8 +123,7 @@ public class GUI extends JFrame implements ActionListener{
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
-		targetLocation = new JLabel("Target location:
-			("+ game.getTargetX() + ", " + game.getTargetY() + ")");
+		targetLocation = new JLabel("Target location:" + game.getTargetX() + ", " + game.getTargetY() + ")");
 		score = new JLabel("Score: " + game.getScore());
 		xField = new JTextField(length);
 		yField = new JTextField(length);
@@ -248,8 +247,7 @@ public class GUI extends JFrame implements ActionListener{
 				numTurns++;
 				
 				//update game info
-				targetLocation.setText("Target location:(
-					"+ game.getTargetX() + ", " + game.getTargetY() + ")");
+				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 				numOfTurns.setText("Number of Shots: " + numTurns);
 				
 				// if the target was hit, let the user know, update the score and generate a new target
