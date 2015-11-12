@@ -105,6 +105,7 @@ public class Game {
 	
 	/**
 	 * Creates a new instance of the Game class if there isn't one yet created.
+	 * @return returns a new Game instance
 	 */
 	public static Game getGameObject(){
 		if(game == null)
@@ -214,6 +215,8 @@ public class Game {
 	
 	/**
 	 * Function that determines whether or not the target was hit
+	 * @param double x is the x value for the path
+	 * @param double y is the y value for the path
 	 * @return true if the target contains the arcs path, false otherwise
 	 */
 	public boolean targetContains(double x, double y){
@@ -338,18 +341,24 @@ public class Game {
 	
 	/**
 	 * Returns the current X starting point of the target
+	 * @param i is the index value
 	 * @return targetX
 	 */
 	public double getTargetX(int i){
 		return targetX.get(i);
 	}
 	
+	/**
+	 * Returns the current X starting point of the target
+	 * @return targetX in string form
+	 */
 	public String getTargetX(){
 		return df.format(targetX.get(0));
 	}
 	
 	/**
 	 * Returns the current X path of the ball
+	 * @param i is the index location
 	 * @return pathX
 	 */
 	public double getPathX(int i){
@@ -368,6 +377,7 @@ public class Game {
 	
 	/**
 	 * Returns the current Y starting point of the target
+	 * @param i is the index location
 	 * @return targetY
 	 */
 	public double getTargetY(int i){
@@ -384,6 +394,7 @@ public class Game {
 	
 	/**
 	 * Returns the current Y path of the ball
+	 * @param i is the index location
 	 * @return pathY
 	 */
 	public double getPathY(int i){
@@ -402,6 +413,7 @@ public class Game {
 
 	/**
 	 * Returns the current X path of the ball for air resistance
+	 * @param i is the index location
 	 * @return pathXAir
 	 */
 	public double getPathXAir(int i) {
@@ -412,6 +424,7 @@ public class Game {
 
 	/**
 	 * Returns the current Y path of the ball for air resistance
+	 * @param i is the index location
 	 * @return pathYAir
 	 */
 	public double getPathYAir(int i) {
@@ -423,7 +436,7 @@ public class Game {
 	
 	/**
 	 * Assigns an input value to the ball's X velocity
-	 * @param x
+	 * @param x sets the global velocityX to input velocity
 	 */
 	public void setVelX(double x){
 		velocityX = x;
@@ -431,7 +444,7 @@ public class Game {
 	
 	/**
 	 * Assigns an input value to the ball's Y velocity
-	 * @param y
+	 * @param y sets the global velocityY to input velocity
 	 */
 	public void setVelY(double y){
 		velocityY = y;
@@ -497,6 +510,7 @@ public class Game {
 	
 	/**
 	 * Sets the gravity for the algorithms
+	 * @param gravity sets the global variable gravity
 	 */
 	public void setGravity(double gravity){
 		this.gravity = gravity;

@@ -27,34 +27,89 @@ import Model.Planet;
  */
 public class GUI extends JFrame implements ActionListener{
 	
+	/** serialVersion */
 	private static final long serialVersionUID = 1L;
+	
+	/** main panel */
 	private JPanel panel;
+	
+	/** panel for velocities */
 	private JPanel panelNorth;
+	
+	/** panel for labels */
 	private JPanel panelSouth;
+	
+	/** fire the ball */
 	private JButton fire;
+	
+	/** x velocity label */
 	private JLabel xVel;
+	
+	/** y velocity label */
 	private JLabel yVel;
+	
+	/** number of turns label */
 	private JLabel numOfTurns;
+	
+	/** score label */
 	private JLabel score;
+	
+	/** target location label */
 	private JLabel targetLocation;
+	
+	/** field for x velocity input */
 	private JTextField xField;
+	
+	/** field for y velocity input */
 	private JTextField yField;
+	
+	/** resets the game */
 	private JMenuItem reset;
+	
+	/** exits the game */
 	private JMenuItem exit;
+	
+	/** change the planet */
 	private JMenuItem planetSelect;
+	
+	/** menu bar that contains the menu items */
 	private JMenuBar bar;
+	
+	/** file that contains new game and exit */
 	private JMenu file;
+	
+	/** menu that contains planet select */
 	private JMenu edit;
+	
+	/** instance of Game class */
 	private Game game;
+	
+	/** keeps track of number of turns */
 	private int numTurns;
+	
+	/** length of text box */
+	private int length;
+	
+	/** instance of TrajectoryPanel for displaying the trajectory for game */
 	private TrajectoryPanel trajPanel;
+	
+	/** instance of Airpanel that contains the air resistance arc */
 	private AirPanel airPanel;
+	
+	/** instance of InitializePlanet class */
 	private InitializePlanet iPlanet;
+	
+	/** instance of the planet class */
 	private Planet p;
 	
+	/**
+	 * Constructor that initializes the user interface
+	 */
 	public GUI(){
+	
 		game = game.getGameObject();
 		p = Planet.EARTH;
+		length = 5;
 		panel = new JPanel();
 		panelNorth = new JPanel();
 		panelSouth = new JPanel(new GridLayout(4,0));
@@ -68,14 +123,16 @@ public class GUI extends JFrame implements ActionListener{
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
-		targetLocation = new JLabel("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
+		targetLocation = new JLabel("Target location:
+			("+ game.getTargetX() + ", " + game.getTargetY() + ")");
 		score = new JLabel("Score: " + game.getScore());
-		xField = new JTextField(5);
-		yField = new JTextField(5);
+		xField = new JTextField(length);
+		yField = new JTextField(length);
 		trajPanel = new TrajectoryPanel();
 		airPanel = new AirPanel();
 		numTurns = 0;
-
+		
+		//menu bar 
 		bar.add(file);
 		bar.add(edit);
 		file.add(reset);
@@ -98,16 +155,19 @@ public class GUI extends JFrame implements ActionListener{
 		panelSouth.add(score);
 
 		setJMenuBar(bar);
-
+		
+		//adds trajectory panels to GUI
 		add(trajPanel, BorderLayout.SOUTH);
 		add(airPanel, BorderLayout.CENTER);
 		
+		//frame options
 		pack();
 		setTitle("Trajectory!");
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-				
+		
+		//action listeners
 		fire.addActionListener(this);
 		reset.addActionListener(this);
 		exit.addActionListener(this);
@@ -115,6 +175,9 @@ public class GUI extends JFrame implements ActionListener{
 
 	}
 	
+	/**
+	 * Resets the panels by clearing the arcs
+	 */
 	private void resetPanels(){
 		trajPanel.removeAll();
 		trajPanel.resetVelocities();
@@ -148,12 +211,17 @@ public class GUI extends JFrame implements ActionListener{
 		airPanel.resetVelocities();
 	}
 
+	/**
+	 * ActionPerformed method that allows events
+	 * @param event for the action listener
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
 		JComponent e = (JComponent)event.getSource();
 
-		if(e == fire){
+		//if fire button is clicked
+		if(e == fire) {
 			
 			resetPanels();
 			
@@ -180,7 +248,8 @@ public class GUI extends JFrame implements ActionListener{
 				numTurns++;
 				
 				//update game info
-				targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
+				targetLocation.setText("Target location:(
+					"+ game.getTargetX() + ", " + game.getTargetY() + ")");
 				numOfTurns.setText("Number of Shots: " + numTurns);
 				
 				// if the target was hit, let the user know, update the score and generate a new target
@@ -197,12 +266,17 @@ public class GUI extends JFrame implements ActionListener{
 			xField.setText("");
 			yField.setText("");
 		}
+		
+		//if reset on menubar is clicked
 		if(e == reset){
 			newGame();
 		}
+		
+		//if exit is clicked
 		if(e == exit)
 			System.exit(0);
 		
+		//if planetSelect is clicked on menubar
 		if(e == planetSelect){
 			iPlanet = new InitializePlanet();
 			p = iPlanet.getPlanet();
