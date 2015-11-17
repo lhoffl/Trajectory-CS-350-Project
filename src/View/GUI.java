@@ -72,6 +72,12 @@ public class GUI extends JFrame implements ActionListener{
 	/** change the planet */
 	private JMenuItem planetSelect;
 	
+	/** change the planet */
+	private JMenuItem golf;
+	
+	/** change the planet */
+	private JMenuItem bounceOn;
+	
 	/** menu bar that contains the menu items */
 	private JMenuBar bar;
 	
@@ -80,6 +86,12 @@ public class GUI extends JFrame implements ActionListener{
 	
 	/** menu that contains planet select */
 	private JMenu edit;
+	
+	/** menu that contains planet select */
+	private JMenu view;
+	
+	/** menu that contains planet select */
+	private JMenu mode;
 	
 	/** instance of Game class */
 	private Game game;
@@ -116,10 +128,14 @@ public class GUI extends JFrame implements ActionListener{
 		fire = new JButton("Fire!");
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
+		golf = new JMenuItem("Golf mode");
+		bounceOn = new JMenuItem("Bounce on");
 		planetSelect = new JMenuItem("Select Planet");
 		bar = new JMenuBar();
 		file = new JMenu("File");
 		edit = new JMenu("Edit");
+		view = new JMenu("View");
+		mode = new JMenu("Mode");
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
@@ -134,8 +150,12 @@ public class GUI extends JFrame implements ActionListener{
 		//menu bar 
 		bar.add(file);
 		bar.add(edit);
+		bar.add(view);
+		bar.add(mode);
 		file.add(reset);
 		file.add(exit);
+		mode.add(golf);
+		mode.add(bounceOn);
 		edit.add(planetSelect);
 		
 		setLayout(new BorderLayout());

@@ -1,8 +1,18 @@
 package Model;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Trajectory! - a physics based game, where the user aims to 
@@ -73,6 +83,8 @@ public class Game {
 	/* the number of targets the player has hit this game */
 	private int score;
 	
+	private HashMap<Integer, String> leaderboard;
+	
 	/**
 	 * Constructor that initializes the game
 	 */
@@ -98,6 +110,10 @@ public class Game {
 
 		//create an initial target
 		this.newTarget();
+		retrieveLeaderboard();
+		for(int i = 1; i < leaderboard.size()+1; i++){
+			System.out.println(leaderboard.get(i));
+		}
 		
 		// reset the score
 		score = 0;
@@ -338,6 +354,72 @@ public class Game {
 			}
 		}
 	}
+	
+	public boolean checkScore(int score, String name){
+		
+		String currPlayer;
+		String[] tokens;
+		int currScore;
+		
+		for(int i = 1; i < leaderboard.size()+1; i++){
+			currPlayer = leaderboard.get(i);
+			tokens = currPlayer.split(":");
+			currPlayer = tokens[0];
+			currScore = Integer.parseInt(tokens[1]);
+			
+			if(score > currScore){
+				int j = i;
+				String temp = leaderboard.get(j);
+				leaderboard.remove(j);
+				leaderboard.put(j, name+":"+score);
+				leaderboard.put(j+1, temp);
+				for(int x = j+1; x < leaderboard.size(); x++){
+					temp = leaderboard.get(x);
+					System.out.println("HERE" + temp);
+					
+					tokens = temp.split(" ");
+					currPlayer = tokens[1];
+					
+					leaderboard.remove(x+1);
+					leaderboard.remove(x);
+					leaderboard.put(x+1, currPlayer);
+				}
+				saveLeaderboard();
+				return true;		
+			}
+		}
+		return false;
+	}
+	
+	public void retrieveLeaderboard(){
+		leaderboard = new HashMap<Integer, String>();
+		File file = new File("leaderboard.txt");
+		Scanner sc;
+		
+		try {
+			sc = new Scanner(file);
+			while(sc.hasNext()){
+				String temp = sc.nextLine();
+				String[] tokens = temp.split(" ");
+				int position = Integer.parseInt(tokens[0]);
+				String player = tokens[1];
+				leaderboard.put(position, player);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public void saveLeaderboard(){
+		
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("leaderboard.txt"), StandardCharsets.UTF_8))) {
+			for(int i = 1; i < leaderboard.size()+1; i++){
+				writer.write(i + " " + leaderboard.get(i) + '\n');
+			}
+		} catch (IOException ex) {
+		}  
+	}
+	
 	
 	/**
 	 * Returns the current X starting point of the target
