@@ -641,5 +641,14 @@ public class Game {
 		return pathX;
 	}
 
+	public double getYComponent(double velocity, double theta){
+		double yComponent = velocity * Math.sin(theta);
+		return yComponent;
+	}
+
+	public double getXComponent(double velocity, double theta){
+		double xComponent = velocity * Math.cos(theta);
+		return xComponent;
+	}
 	
 }
