@@ -111,9 +111,6 @@ public class Game {
 		//create an initial target
 		this.newTarget();
 		retrieveLeaderboard();
-		for(int i = 1; i < leaderboard.size()+1; i++){
-			System.out.println(leaderboard.get(i));
-		}
 		
 		// reset the score
 		score = 0;
@@ -128,6 +125,16 @@ public class Game {
 			game = new Game();
 		return game;
 	}
+	
+	public String printLeaderboard(){
+		String printMe = "";
+		for(int i = 1; i < leaderboard.size()+1; i++){
+			printMe += i + "     " + leaderboard.get(i) +"\n";
+		}
+		
+		return printMe;
+	}
+	
 	
 	/**
 	 * Creates a new random target within a certain area of the 'board'
@@ -355,7 +362,7 @@ public class Game {
 		}
 	}
 	
-	public boolean checkScore(int score, String name){
+	public int checkScore(int score){
 		
 		String currPlayer;
 		String[] tokens;
@@ -368,32 +375,33 @@ public class Game {
 			currPlayer = tokens[0];
 			currScore = Integer.parseInt(tokens[1]);
 			
-			if(score > currScore){
-				int j = i;
-				String temp = leaderboard.get(j);
-				leaderboard.remove(j);
-				leaderboard.put(j, name+":"+score);
-				leaderboard.put(j+1, temp);
-				
-				// move the rest of the board down 1 place
-				int x = j+2;
-				temp = leaderboard.get(x);
-				while(temp != null && x < leaderboard.size()){
-					System.out.println(x + " " + temp);
-					
-					leaderboard.remove(x+1);
-					leaderboard.put(x+1, temp);
-					
-					x++;
-					temp = leaderboard.get(x+1);
-				}
-				saveLeaderboard();
-				return true;		
-			}
+			if(score > currScore) return i;
+			
 		}
-		return false;
+		return -1;
 	}
 	
+	public void updateLeaderboard(int i, int score, String name){
+		int j = i;
+		String temp = leaderboard.get(j);
+		leaderboard.remove(j);
+		leaderboard.put(j, name+":"+score);
+		leaderboard.put(j+1, temp);
+		
+		// move the rest of the board down 1 place
+		int x = j+2;
+		temp = leaderboard.get(x);
+		while(temp != null && x < leaderboard.size()){
+			System.out.println(x + " " + temp);
+			
+			leaderboard.remove(x+1);
+			leaderboard.put(x+1, temp);
+			
+			x++;
+			temp = leaderboard.get(x+1);
+		}
+		saveLeaderboard();
+	}
 	public void retrieveLeaderboard(){
 		leaderboard = new HashMap<Integer, String>();
 		File file = new File("leaderboard.txt");

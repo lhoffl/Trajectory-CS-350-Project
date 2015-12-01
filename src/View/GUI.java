@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -221,6 +222,7 @@ public class GUI extends JFrame implements ActionListener{
 	 */
 	private void newGame() {
 		numTurns = 0;
+		
 		game.resetScore();
 		nextTarget();
 	}
@@ -301,16 +303,12 @@ public class GUI extends JFrame implements ActionListener{
 		
 		//if exit is clicked
 		if(e == exit){
-			int finalScore = game.getScore();
-			finalScore = 100;
-			String player = "Matt";
-			
-			if(game.checkScore(finalScore, player)){
-				System.out.println("You made the leaderboard");
+			int check = game.checkScore(game.getScore());
+			if(check != -1){
+				String name = JOptionPane.showInputDialog("You made the leaderboard, enter your name: ");
+				game.updateLeaderboard(check, game.getScore(), name);
+				JOptionPane.showMessageDialog(this, game.printLeaderboard());
 			}
-			
-			
-			
 			System.exit(0);
 		}
 		
