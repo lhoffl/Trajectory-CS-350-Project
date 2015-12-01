@@ -82,10 +82,15 @@ public class AirPanel extends JPanel implements ActionListener{
 		getLayout();
 		g.setColor(Color.GREEN);
 		g2d.drawLine(0, 0, getWidth(), 0);
+		//if(game.getNumTurns() == 0){
+		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
 		g.setColor(Color.RED);
-		g2d.fillRect((int)game.getTargetX(0), 0, 10, 10);
-		
+		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
+		g2d.fill3DRect((int) game.getTargetX(0)+4, 0, 3, 30, true);
+		g.setColor(Color.GREEN);
+		g2d.fill3DRect((int) game.getTargetX(0)+4, 30, 20, 10, true);
 		g.setColor(Color.BLACK);
+		g2d.fillOval((int) (game.getTargetX(0)), 0, 10, 5);
 
 		//gets the x and y points and draws the arc
 		for(int i = 0; i < game.getPathSize()-1; i++){
