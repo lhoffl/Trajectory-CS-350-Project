@@ -361,7 +361,8 @@ public class Game {
 		String[] tokens;
 		int currScore;
 		
-		for(int i = 1; i < leaderboard.size()+1; i++){
+		System.out.println(leaderboard.size());
+		for(int i = 1; i < leaderboard.size(); i++){
 			currPlayer = leaderboard.get(i);
 			tokens = currPlayer.split(":");
 			currPlayer = tokens[0];
@@ -373,16 +374,18 @@ public class Game {
 				leaderboard.remove(j);
 				leaderboard.put(j, name+":"+score);
 				leaderboard.put(j+1, temp);
-				for(int x = j+1; x < leaderboard.size(); x++){
-					temp = leaderboard.get(x);
-					System.out.println("HERE" + temp);
-					
-					tokens = temp.split(" ");
-					currPlayer = tokens[1];
+				
+				// move the rest of the board down 1 place
+				int x = j+2;
+				temp = leaderboard.get(x);
+				while(temp != null && x < leaderboard.size()){
+					System.out.println(x + " " + temp);
 					
 					leaderboard.remove(x+1);
-					leaderboard.remove(x);
-					leaderboard.put(x+1, currPlayer);
+					leaderboard.put(x+1, temp);
+					
+					x++;
+					temp = leaderboard.get(x+1);
 				}
 				saveLeaderboard();
 				return true;		

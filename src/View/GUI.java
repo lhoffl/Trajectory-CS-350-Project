@@ -114,6 +114,9 @@ public class GUI extends JFrame implements ActionListener{
 	/** instance of the planet class */
 	private Planet p;
 	
+	private JLabel currPlanet;
+	private JLabel currGravity;
+	
 	/**
 	 * Constructor that initializes the user interface
 	 */
@@ -124,7 +127,7 @@ public class GUI extends JFrame implements ActionListener{
 		length = 5;
 		panel = new JPanel();
 		panelNorth = new JPanel();
-		panelSouth = new JPanel(new GridLayout(4,0));
+		panelSouth = new JPanel(new GridLayout(6,0));
 		fire = new JButton("Fire!");
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
@@ -139,12 +142,16 @@ public class GUI extends JFrame implements ActionListener{
 		xVel = new JLabel("X-Velocity");
 		yVel = new JLabel("Y-Velocity");
 		numOfTurns = new JLabel("Number of Shots: " + numTurns);
-		targetLocation = new JLabel("Target location:" + game.getTargetX() + ", " + game.getTargetY() + ")");
+		targetLocation = new JLabel("Target location: (" + game.getTargetX() + ", " + game.getTargetY() + ")");
+		currPlanet = new JLabel("Planet: " + p);
+		currGravity = new JLabel("Gravity: " + p.getGravity());
 		score = new JLabel("Score: " + game.getScore());
 		xField = new JTextField(length);
 		yField = new JTextField(length);
 		trajPanel = new TrajectoryPanel();
+		trajPanel.add(new JLabel("No Resistance"));
 		airPanel = new AirPanel();
+		airPanel.add(new JLabel("Air Resistance"));
 		numTurns = 0;
 		
 		//menu bar 
@@ -172,7 +179,9 @@ public class GUI extends JFrame implements ActionListener{
 		panelSouth.add(targetLocation);
 		panelSouth.add(numOfTurns);
 		panelSouth.add(score);
-
+		panelSouth.add(currPlanet);
+		panelSouth.add(currGravity);
+		
 		setJMenuBar(bar);
 		
 		//adds trajectory panels to GUI
@@ -291,8 +300,19 @@ public class GUI extends JFrame implements ActionListener{
 		}
 		
 		//if exit is clicked
-		if(e == exit)
+		if(e == exit){
+			int finalScore = game.getScore();
+			finalScore = 100;
+			String player = "Matt";
+			
+			if(game.checkScore(finalScore, player)){
+				System.out.println("You made the leaderboard");
+			}
+			
+			
+			
 			System.exit(0);
+		}
 		
 		//if planetSelect is clicked on menubar
 		if(e == planetSelect){
@@ -301,7 +321,8 @@ public class GUI extends JFrame implements ActionListener{
 			game.setGravity(p.getGravity());
 			trajPanel.setBackground(p.getColor());
 			airPanel.setBackground(p.getColor());
-			System.out.printf("Planet: %s, gravity: %f\n", p.toString(), p.getGravity());
+			currPlanet.setText("Planet: " + p);
+			currGravity.setText("Gravity: " + p.getGravity());
 		}
 
 	}
