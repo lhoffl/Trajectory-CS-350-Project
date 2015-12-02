@@ -29,6 +29,7 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 	private Projectile[] projectileList = {Projectile.Default,
 			Projectile.BowlingBall,
 			Projectile.GolfBall,
+			Projectile.WaterMelon,
 			Projectile.Custom};
 	private Projectile projectile = null;
 
@@ -62,6 +63,9 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 
 		setVisible(true);
 		pack();
+		setResizable(false);
+		setTitle("Change Projectile");
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -89,11 +93,22 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 		JComponent e = (JComponent)event.getSource();
 
 		if(e == create){
+
+			//Must be a double or integer
+			try{
+				projectile.setDiameter(Double.parseDouble(diameterBox.getText()));
+			}
+			catch(NumberFormatException n){
+				System.out.println("Exception One - Diameter");
+			}
+			//Must be a double or integer
+			try{
+				projectile.setMass(Double.parseDouble(massBox.getText()));
+			}
+			catch(NumberFormatException n){
+				System.out.println("Exception Two - Mass");
+			}
 			projectile.setName(nameBox.getText());
-			double mass = Double.parseDouble(massBox.getText());
-			projectile.setMass(mass);
-			double diameter = Double.parseDouble(diameterBox.getText());
-			projectile.setDiameter(diameter);
 			dispose();
 		}
 
@@ -107,14 +122,6 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 			massBox.setText("");
 			diameterBox.setText("");
 			nameBox.setText("");
-			try{
-				projectile.setDiameter(Double.parseDouble(diameterBox.getText()));
-				projectile.setMass(Double.parseDouble(massBox.getText()));
-				projectile.setName(nameBox.getText());
-			}
-			catch(Exception f){
-				System.out.print("Not allowed.");
-			}
 
 		}
 
@@ -138,7 +145,7 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 
 		if(list.getSelectedItem() == Projectile.WaterMelon){
 			nameBox.setText("Watermelon");
-			massBox.setText(".254");
+			massBox.setText("10.0");
 			diameterBox.setText("11.34");
 		}
 
