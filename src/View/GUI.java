@@ -73,6 +73,9 @@ public class GUI extends JFrame implements ActionListener{
 	/** change the planet */
 	private JMenuItem planetSelect;
 	
+	/** change the projectile */
+	private JMenuItem projectileSelect;
+	
 	/** change the planet */
 	private JMenuItem golf;
 	
@@ -115,6 +118,12 @@ public class GUI extends JFrame implements ActionListener{
 	/** instance of the planet class */
 	private Planet p;
 	
+	/** instance of projectile class */
+	private Projectile projectile;
+	
+	/** instance of ChangeProjectile class */
+	private ChangeProjectile changeProjectile;
+	
 	private JLabel currPlanet;
 	private JLabel currGravity;
 	
@@ -125,6 +134,7 @@ public class GUI extends JFrame implements ActionListener{
 	
 		game = game.getGameObject();
 		p = Planet.EARTH;
+		projectile = Projectile.Default;
 		length = 5;
 		panel = new JPanel();
 		panelNorth = new JPanel();
@@ -135,6 +145,7 @@ public class GUI extends JFrame implements ActionListener{
 		golf = new JMenuItem("Golf mode");
 		bounceOn = new JMenuItem("Bounce on");
 		planetSelect = new JMenuItem("Select Planet");
+		projectileSelect = new JMenuItem("Select Projectile");
 		bar = new JMenuBar();
 		file = new JMenu("File");
 		edit = new JMenu("Edit");
@@ -165,6 +176,7 @@ public class GUI extends JFrame implements ActionListener{
 		mode.add(golf);
 		mode.add(bounceOn);
 		edit.add(planetSelect);
+		edit.add(projectileSelect);
 		
 		setLayout(new BorderLayout());
 		
@@ -201,7 +213,7 @@ public class GUI extends JFrame implements ActionListener{
 		reset.addActionListener(this);
 		exit.addActionListener(this);
 		planetSelect.addActionListener(this);
-
+		projectileSelect.addActionListener(this);
 	}
 	
 	/**
@@ -273,7 +285,7 @@ public class GUI extends JFrame implements ActionListener{
 				
 				// throw the ball
 				game.throwBall(xVal, yVal);
-				game.throwBall(xVal, yVal, 250, 0.5);
+				game.throwBall(xVal, yVal, projectile.getMass(), projectile.getDiameter());
 
 				numTurns++;
 				
@@ -321,6 +333,11 @@ public class GUI extends JFrame implements ActionListener{
 			airPanel.setBackground(p.getColor());
 			currPlanet.setText("Planet: " + p);
 			currGravity.setText("Gravity: " + p.getGravity());
+		}
+		
+		if(e == projectileSelect){
+			changeProjectile = new ChangeProjectile();
+			projectile = changeProjectile.getProjectile();
 		}
 
 	}
