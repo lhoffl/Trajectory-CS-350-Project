@@ -791,4 +791,32 @@ public class Game {
 		shotNumber++;
 	}
 	
+	public double autoSolverTheta(double velocity, double gravity, double range){
+		double theta;
+		//= (1/2) * (Math.asin(((range * gravity) / (Math.pow(velocity, 2)))));
+		System.out.println("velocity: " + velocity);
+		System.out.println("gravity: " + gravity);
+		System.out.println("range: " + range);
+		theta = (range * gravity) / (Math.pow(velocity,  2));
+		theta = Math.asin(theta);
+		theta = Math.toDegrees(theta);
+		theta = theta / 2;
+		System.out.println(theta);
+		return theta;
+	}
+
+	//Broken
+	public double autoSolverVelocity(double theta, double gravity, double range){
+		range = Double.parseDouble(df.format(range));
+		System.out.println("theta: " + theta);
+		System.out.println("gravity: " + gravity);
+		System.out.println("range: " + range);
+
+		double velocity = range * gravity;
+		velocity = velocity / (Math.sin(2 * theta));
+		velocity = Math.sqrt(velocity);
+		System.out.println(velocity);
+		return velocity;
+	}
+	
 }
