@@ -774,4 +774,19 @@ public class Game {
 			return eighteenHole[currentHole - 1];
 	}
 	
+	//Return how many strokes
+	public int getShotNumber(){
+		return shotNumber;
+	}
+
+	//First shot of a hole
+	public void resetShotNumber(){
+		shotNumber = 0;
+	}
+
+	//Add 1 to shotNumber after shot
+	public void incrementShotNumber(){
+		shotNumber++;
+	}
+	
 }
