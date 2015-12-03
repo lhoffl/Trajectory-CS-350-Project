@@ -13,6 +13,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import Model.ColorSet;
 import Model.Game;
 
 /**
@@ -60,6 +61,12 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 	/** instance of the Game class */
 	private Game game;
 
+	private Color arc;
+
+	private Color break_line;
+
+	private Color targetColor;
+
 	/**
 	 * Constructor that creates the panel
 	 */
@@ -81,16 +88,16 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		g2d.translate(0, getHeight()-10);
 		g2d.scale(1, -1);
 		getLayout();
-		g.setColor(Color.GREEN);
+		g.setColor(break_line);
 		g2d.drawLine(0, 0, getWidth(), 0);
 		//if(game.getNumTurns() == 0){
 		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
-		g.setColor(Color.RED);
+		g.setColor(targetColor);
 		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
 		g2d.fill3DRect((int) game.getTargetX(0)+4, 0, 3, 30, true);
-		g.setColor(Color.GREEN);
+		g.setColor(break_line);
 		g2d.fill3DRect((int) game.getTargetX(0)+4, 30, 20, 10, true);
-		g.setColor(Color.BLACK);
+		g.setColor(arc);
 		g2d.fillOval((int) (game.getTargetX(0)), 0, 10, 5);
 
 		//loops through the path 
@@ -142,6 +149,12 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setColors(ColorSet colors) {
+		arc = colors.getArc();
+		break_line = colors.getBreak();
+		targetColor = colors.getTarget();
 	}
 	
 }

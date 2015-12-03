@@ -12,37 +12,37 @@ import java.awt.Color;
 public enum Planet {	
 
 	/** Planet Mercury */
-	MERCURY("Mercury", 3.7, Color.DARK_GRAY), 
+	MERCURY("Mercury", 3.7, ColorSet.COLORSET_MERCURY), 
 	
 	/** Planet Venus */
-	VENUS("Venus", 8.87, Color.YELLOW),
+	VENUS("Venus", 8.87, ColorSet.COLORSET_VENUS),
 	
 	/** Planet Earth */
-	EARTH("Earth", 9.788, Color.BLUE),
+	EARTH("Earth", 9.788, ColorSet.COLORSET_EARTH),
 	
 	/** Planet Mars */
-	MARS("Mars", 3.71, Color.RED),
+	MARS("Mars", 3.71, ColorSet.COLORSET_MARS),
 	
 	/** Planet Jupiter */
-	JUPITER("Jupiter", 24.92, Color.ORANGE),
+	JUPITER("Jupiter", 24.92, ColorSet.COLORSET_JUPITER),
 	
 	/** Planet Saturn */
-	SATURN("Saturn", 10.44, Color.GRAY),
+	SATURN("Saturn", 10.44, ColorSet.COLORSET_SATURN),
 	
 	/** Planet Uranus */
-	URANUS("Uranus", 8.87, Color.CYAN),
+	URANUS("Uranus", 8.87, ColorSet.COLORSET_URANUS),
 	
 	/** Planet Neptune */
-	NEPTUNE("Neptune", 11.15, Color.CYAN),
+	NEPTUNE("Neptune", 11.15, ColorSet.COLORSET_NEPTUNE),
 	
 	/** Planet Pluto */
-	PLUTO("Pluto", 0.58, Color.LIGHT_GRAY),
+	PLUTO("Pluto", 0.58, ColorSet.COLORSET_PLUTO),
 	
 	/** Planet Luna */
-	LUNA("Luna", 1.62, Color.LIGHT_GRAY),
+	LUNA("Luna", 1.62, ColorSet.COLORSET_LUNA),
 	
 	/** Custom Planet */
-	CUSTOM("Custom", 0.0, Color.GREEN);
+	CUSTOM("Custom", 0.0, ColorSet.COLORSET_CUSTOM);
 
 	/** String that holds the planet's name */
 	private String name;
@@ -51,7 +51,7 @@ public enum Planet {
 	private double surfaceGravity;
 	
 	/** Color of the planet */
-	private Color color;
+	private ColorSet colors;
 	
 	/**
 	 * Constructor that initializes a new Planet
@@ -59,10 +59,10 @@ public enum Planet {
 	 * @param surfaceGravity sets the planet's gravity
 	 * @param Color sets the planet's color
 	 */
-	Planet(String name, double surfaceGravity, Color color){
+	Planet(String name, double surfaceGravity, ColorSet colors){
 		this.name = name;
 		this.surfaceGravity = surfaceGravity;
-		this.color = color;
+		this.colors = colors;
 	}
 	
 	/**
@@ -81,13 +81,6 @@ public enum Planet {
 			this.surfaceGravity = surfaceGravity;
 	}
 	
-	/**
-	 * Changes the planet's color
-	 * @param Color sets the color of the planet
-	 */
-	public void setBackground(Color color){
-			this.color = color;
-	}
 
 	/**
 	 * Returns the current planet's gravity
@@ -101,8 +94,8 @@ public enum Planet {
 	 * Gets the current planet's color
 	 * @return returns planet's color
 	 */
-	public Color getColor(){
-		return color;
+	public ColorSet getColors(){
+		return colors;
 	}
 	
 	/**

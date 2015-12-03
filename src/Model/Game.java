@@ -92,6 +92,8 @@ public class Game {
 	private boolean golfMode;
 	private int par;
 	private int currentHole;
+
+	private int shotNumber;
 	
 	/**
 	 * Constructor that initializes the game

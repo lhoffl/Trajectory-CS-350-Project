@@ -129,6 +129,12 @@ public class GUI extends JFrame implements ActionListener{
 	private JLabel currPlanet;
 	private JLabel currGravity;
 
+	private JLabel trajLabel;
+
+	private JLabel airLabel;
+
+	private JMenuItem leaderboardMenu;
+
 	/**
 	 * Constructor that initializes the user interface
 	 */
@@ -162,10 +168,16 @@ public class GUI extends JFrame implements ActionListener{
 		score = new JLabel("Score: " + game.getScore());
 		velocityField = new JTextField(length);
 		thetaField = new JTextField(length);
+		
+		leaderboardMenu = new JMenuItem("Show Leaderboard");
+		
+		trajLabel = new JLabel("No Resistance");
+		airLabel = new JLabel("Air Resistance");
+		
 		trajPanel = new TrajectoryPanel();
-		trajPanel.add(new JLabel("No Resistance"));
+		trajPanel.add(trajLabel);
 		airPanel = new AirPanel();
-		airPanel.add(new JLabel("Air Resistance"));
+		airPanel.add(airLabel);
 		numTurns = 0;
 
 		//menu bar
@@ -179,6 +191,7 @@ public class GUI extends JFrame implements ActionListener{
 		mode.add(bounceOn);
 		edit.add(planetSelect);
 		edit.add(projectileSelect);
+		view.add(leaderboardMenu);
 
 		setLayout(new BorderLayout());
 
@@ -217,6 +230,7 @@ public class GUI extends JFrame implements ActionListener{
 		planetSelect.addActionListener(this);
 		projectileSelect.addActionListener(this);
 		golf.addActionListener(this);
+		leaderboardMenu.addActionListener(this);
 	}
 
 	/**
@@ -340,8 +354,16 @@ public class GUI extends JFrame implements ActionListener{
 			iPlanet = new InitializePlanet();
 			p = iPlanet.getPlanet();
 			game.setGravity(p.getGravity());
-			trajPanel.setBackground(p.getColor());
-			airPanel.setBackground(p.getColor());
+
+			trajPanel.setBackground(p.getColors().getBackground());
+			airPanel.setBackground(p.getColors().getBackground());
+			
+			trajPanel.setColors(p.getColors());
+			airPanel.setColors(p.getColors());
+			
+			trajLabel.setForeground(p.getColors().getArc());
+			airLabel.setForeground(p.getColors().getArc());
+			
 			currPlanet.setText("Planet: " + p);
 			currGravity.setText("Gravity: " + p.getGravity());
 		}
@@ -356,6 +378,10 @@ public class GUI extends JFrame implements ActionListener{
 				game.golfMode(true);
 
 			}
+		}
+		
+		if(e == leaderboardMenu){
+			JOptionPane.showMessageDialog(this, game.printLeaderboard(),"Leaderboard", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
