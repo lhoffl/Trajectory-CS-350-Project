@@ -84,9 +84,6 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 		return projectile;
 	}
 
-
-
-
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
@@ -150,6 +147,4 @@ public class ChangeProjectile extends JDialog implements ActionListener{
 		}
 
 	}
-
-
 }

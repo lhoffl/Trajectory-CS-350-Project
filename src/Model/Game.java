@@ -117,7 +117,7 @@ public class Game {
 		targetY = new ArrayList<Double>();
 		
 		//set the default 'board' area
-		height = 100;
+		height = 300;
 		width = 500;
 		
 		//instantiate the decimal format for the doubles

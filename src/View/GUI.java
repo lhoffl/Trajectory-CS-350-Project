@@ -160,7 +160,7 @@ public class GUI extends JFrame implements ActionListener{
 		length = 5;
 		panel = new JPanel();
 		panelNorth = new JPanel();
-		panelSouth = new JPanel(new GridLayout(6,0));
+		panelSouth = new JPanel(new GridLayout(8,0));
 
 		fire = new JButton("Fire");
 		fire.setSize(10, 10);
@@ -193,12 +193,10 @@ public class GUI extends JFrame implements ActionListener{
 		leaderboardMenu = new JMenuItem("Show Leaderboard");
 
 		modeLabel = new JLabel("No Resistance");
-		airLabel = new JLabel("Air Resistance");
-
 		trajPanel = new TrajectoryPanel();
-		trajPanel.add(modeLabel);
+		//trajPanel.add(modeLabel);
 		airPanel = new AirPanel();
-		airPanel.add(airLabel);
+		//airPanel.add(airLabel);
 		numTurns = 0;
 
 		//menu bar
@@ -208,9 +206,8 @@ public class GUI extends JFrame implements ActionListener{
 		bar.add(mode);
 		file.add(reset);
 		file.add(exit);
-		mode.add(golf);
+		//mode.add(golf);
 		mode.add(airResistanceMode);
-		mode.add(bounceOn);
 		edit.add(planetSelect);
 		edit.add(projectileSelect);
 		view.add(leaderboardMenu);
@@ -230,11 +227,12 @@ public class GUI extends JFrame implements ActionListener{
 		panelSouth.add(targetLocation);
 		panelSouth.add(numOfTurns);
 		panelSouth.add(score);
+		panelSouth.add(new JLabel(" "));
 		panelSouth.add(currPlanet);
 		panelSouth.add(currGravity);
+		panelSouth.add(modeLabel);
 
 		panel.setBorder(BorderFactory.createBevelBorder(0,Color.BLACK, Color.BLACK));
-
 
 		setJMenuBar(bar);
 
@@ -259,7 +257,6 @@ public class GUI extends JFrame implements ActionListener{
 		airResistanceMode.addActionListener(this);
 		leaderboardMenu.addActionListener(this);
 		autoSolve.addActionListener(this);
-		
 		
 		game.setWidth(this.size().width);
 	}
@@ -395,13 +392,8 @@ public class GUI extends JFrame implements ActionListener{
 			game.setGravity(p.getGravity());
 
 			trajPanel.setBackground(p.getColors().getBackground());
-			airPanel.setBackground(p.getColors().getBackground());
 
 			trajPanel.setColors(p.getColors());
-			airPanel.setColors(p.getColors());
-
-			modeLabel.setForeground(p.getColors().getArc());
-			airLabel.setForeground(p.getColors().getArc());
 
 			currPlanet.setText("Planet: " + p);
 			currGravity.setText("Gravity: " + p.getGravity());
@@ -449,7 +441,7 @@ public class GUI extends JFrame implements ActionListener{
 		if(airResistanceMode.isSelected()){
 			golf.setEnabled(false);
 			game.setMode(1);
-			modeLabel.setText("Air Resistance");
+			modeLabel.setText("Air Resistance overlay");
 			revalidate();
 		}
 
@@ -457,8 +449,5 @@ public class GUI extends JFrame implements ActionListener{
 			game.setMode(0);
 			modeLabel.setText("No Resistance");
 		}
-
-
-
 	}
 }

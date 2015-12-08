@@ -72,7 +72,7 @@ public class TrajectoryPanel extends JPanel{
 	 */
 	public TrajectoryPanel(){
 	
-		setPreferredSize(new Dimension(100,150));
+		setPreferredSize(new Dimension(100,300));
 		game = Game.getGameObject();
 	}
 
