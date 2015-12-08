@@ -473,7 +473,7 @@ public class Game {
 			currPlayer = tokens[0];
 			currScore = Integer.parseInt(tokens[1]);
 			
-			if(score > currScore) return i;
+			if(score >= currScore) return i;
 			
 		}
 		return -1;

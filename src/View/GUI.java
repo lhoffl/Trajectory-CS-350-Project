@@ -367,6 +367,13 @@ public class GUI extends JFrame implements ActionListener{
 
 		//if reset on menubar is clicked
 		if(e == reset){
+			int check = game.checkScore(game.getScore());
+			if(check != -1){
+				String name = JOptionPane.showInputDialog("You made the leaderboard, enter your name: ");
+				game.updateLeaderboard(check, game.getScore(), name);
+				JOptionPane.showMessageDialog(this, game.printLeaderboard());
+			}
+			
 			newGame();
 		}
 
