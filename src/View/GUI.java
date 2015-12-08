@@ -259,7 +259,9 @@ public class GUI extends JFrame implements ActionListener{
 		airResistanceMode.addActionListener(this);
 		leaderboardMenu.addActionListener(this);
 		autoSolve.addActionListener(this);
-
+		
+		
+		game.setWidth(this.size().width);
 	}
 
 	/**
@@ -423,16 +425,10 @@ public class GUI extends JFrame implements ActionListener{
 		}
 
 		if(e == autoSolve){
-			/*if(velocityField.getText().equals("")){
-				JOptionPane.showMessageDialog(this, "Enter value into velocity field.");
-			}
-			else{*/
-			//double velocity = Double.parseDouble(velocityField.getText());
 			double theta = game.autoSolverTheta(70, p.getGravity(), game.getTargetX(0));
 			velocityField.setText("" + 70);
 			thetaField.setText("" + df.format(theta));
 
-			//System.out.println("Velocity: " + velocity);
 			System.out.println("Theta: " + theta);
 			// set the values of the velocities
 			theta = Math.toRadians(theta);
@@ -441,19 +437,17 @@ public class GUI extends JFrame implements ActionListener{
 			double y = game.getYComponent(70, theta);
 
 			game.throwBall(x, y);
-			//}
 		}
 
 		if(airResistanceMode.isSelected()){
 			golf.setEnabled(false);
-			add(airPanel, BorderLayout.SOUTH);
+			game.setMode(1);
 			modeLabel.setText("Air Resistance");
-			//resetPanels();
 			revalidate();
 		}
 
 		if(!airResistanceMode.isSelected()){
-			golf.setEnabled(true);
+			game.setMode(0);
 			modeLabel.setText("No Resistance");
 		}
 

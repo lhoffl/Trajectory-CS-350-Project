@@ -23,7 +23,7 @@ import Model.Game;
  * @author Matthew Hoffman, Ian Mohr, David Fletcher
  * @version Release Two | Last Updated: 11/11/2015
  */
-public class TrajectoryPanel extends JPanel implements ActionListener{
+public class TrajectoryPanel extends JPanel{
 
 	/** used to draw the arc for x points*/
 	private double velX;
@@ -82,16 +82,18 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 	 */
 	@Override
 	public void paintComponent(Graphics g){
+		
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		AffineTransform old = g2d.getTransform();
+		
 		g2d.translate(0, getHeight()-10);
 		g2d.scale(1, -1);
 		getLayout();
+		
 		g.setColor(break_line);
 		g2d.drawLine(0, 0, getWidth(), 0);
-		//if(game.getNumTurns() == 0){
-		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
+		
 		g.setColor(targetColor);
 		//g2d.fillRect(game.randomTargetX(), 0, 10, 10);
 		g2d.fill3DRect((int) game.getTargetX(0)+4, 0, 3, 30, true);
@@ -99,19 +101,41 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		g2d.fill3DRect((int) game.getTargetX(0)+4, 30, 20, 10, true);
 		g.setColor(arc);
 		g2d.fillOval((int) (game.getTargetX(0)), 0, 10, 5);
-
-		//loops through the path 
-		for(int i = 0; i < game.getPathSize()-1; i++){
-			prevX = game.getPathX(i);
-			prevY = game.getPathY(i);
-			xVel = game.getPathX(i+1);
-			yVel = game.getPathY(i+1);
-			g2d.drawLine((int)prevX, (int)prevY, (int)xVel, (int)yVel);
-
+		
+		if(game.getMode() == 0){
+			//loops through the path 
+			for(int i = 0; i < game.getPathSize()-1; i++){
+				prevX = game.getPathX(i);
+				prevY = game.getPathY(i);
+				xVel = game.getPathX(i+1);
+				yVel = game.getPathY(i+1);
+				g2d.drawLine((int)prevX, (int)prevY, (int)xVel, (int)yVel);
+			}
 		}
-
+		else if(game.getMode() == 1){
+			
+			//loops through the path 
+			for(int i = 0; i < game.getPathSize()-1; i++){
+				prevX = game.getPathX(i);
+				prevY = game.getPathY(i);
+				xVel = game.getPathX(i+1);
+				yVel = game.getPathY(i+1);
+				g2d.drawLine((int)prevX, (int)prevY, (int)xVel, (int)yVel);
+			}
+			
+			g.setColor(targetColor);
+			g2d.fillOval((int) (game.getTargetX(0)), 0, 10, 5);
+			//gets the x and y points and draws the arc
+			for(int i = 0; i < game.getAirPathSize()-1; i++){
+				prevX = game.getPathXAir(i);
+				prevY = game.getPathYAir(i);
+				xVel = game.getPathXAir(i+1);
+				yVel = game.getPathYAir(i+1);
+				g2d.drawLine((int)prevX, (int)prevY, (int)xVel, (int)yVel);
+			}
+		}
+		repaint();
 		g2d.setTransform(old);
-
 	}
 	
 	/**
@@ -145,16 +169,11 @@ public class TrajectoryPanel extends JPanel implements ActionListener{
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void setColors(ColorSet colors) {
 		arc = colors.getArc();
 		break_line = colors.getBreak();
 		targetColor = colors.getTarget();
 	}
+
 	
 }

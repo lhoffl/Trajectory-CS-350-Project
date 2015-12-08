@@ -94,6 +94,11 @@ public class Game {
 	private int currentHole;
 
 	private int shotNumber;
+
+	private final int vaccuumOnly = 0;
+	private final int bothModes = 1;
+	
+	private int mode;
 	
 	/**
 	 * Constructor that initializes the game
@@ -128,6 +133,8 @@ public class Game {
 		golfScore = 0;
 		isEighteen = false;
 		golfMode = false;
+		
+		mode = vaccuumOnly;
 	}
 	
 	/**
@@ -559,6 +566,16 @@ public class Game {
 		return pathX.size();
 	}
 	
+	
+	/**
+	 * Returns the size of the path
+	 * @return size of path
+	 */
+	public int getAirPathSize(){
+		return pathXAir.size();
+	}
+
+	
 	/**
 	 * Returns the current Y starting point of the target
 	 * @param i is the index location
@@ -819,4 +836,16 @@ public class Game {
 		return velocity;
 	}
 	
+	public int getMode(){
+		return mode;
+	}
+	
+	public void setMode(int mode){
+		if(mode == vaccuumOnly || mode == bothModes)
+			this.mode = mode;
+	}
+	
+	public void setWidth(int width){
+		this.width = width;
+	}
 }
