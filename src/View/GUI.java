@@ -404,21 +404,6 @@ public class GUI extends JFrame implements ActionListener{
 			projectile = changeProjectile.getProjectile();
 		}
 
-		if(e == golf){
-			if(golf.isSelected()){
-				modeLabel.setText("Golf Mode");
-				autoSolve.setEnabled(false);
-				game.golfMode(true);
-				airResistanceMode.setEnabled(false);
-
-			}
-			if(!golf.isSelected()){
-				modeLabel.setText("No Resistance");
-				autoSolve.setEnabled(true);
-				airResistanceMode.setEnabled(true);
-			}
-		}
-
 		if(e == leaderboardMenu){
 			JOptionPane.showMessageDialog(this, game.printLeaderboard(),"Leaderboard", JOptionPane.INFORMATION_MESSAGE);
 		}

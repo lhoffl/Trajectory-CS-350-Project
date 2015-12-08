@@ -85,14 +85,6 @@ public class Game {
 	
 	private HashMap<Integer, String> leaderboard;
 	
-	private int[] nineHole = {4,3,5,4,4,5,4,3,4};
-	private int[] eighteenHole = {4,3,5,4,4,5,4,3,4,4,3,5,4,4,5,4,3,4};
-	private int golfScore;
-	private boolean isEighteen;
-	private boolean golfMode;
-	private int par;
-	private int currentHole;
-
 	private int shotNumber;
 
 	private final int vaccuumOnly = 0;
@@ -130,10 +122,6 @@ public class Game {
 		// reset the score
 		score = 0;
 		
-		golfScore = 0;
-		isEighteen = false;
-		golfMode = false;
-		
 		mode = vaccuumOnly;
 	}
 	
@@ -156,63 +144,6 @@ public class Game {
 		return printMe;
 	}
 	
-	
-	/**
-	 * Creates a new random target within a certain area of the 'board'
-	 */
-	 /*
-	public void newTarget(){
-		
-		// If a target exists remove it 1
-		targetX.clear();
-		targetY.clear();
-		
-		//New random instance
-		Random rand = new Random();
-		
-		// variables used to determine where the target may spawn
-		double rangeMax = width-1;
-		double rangeMin = width/2;
-		
-		// temporary variables used to store the targets current location
-		double tempX, tempY;
-		
-		// create a random (X,Y) pair for the target
-		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-		//tempY = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();		//for use in a later release
-		
-		// the Y coordinate will always be on the X-axis for release one
-		tempY = 0;
-		
-		//add the random starting point to the target area
-		targetX.add(tempX);
-		targetY.add(tempY);
-		
-		// variable used to determine if the area should be above or below the Y value
-		boolean Ydirection = false; 
-		if (tempY - 1 > 0){
-			Ydirection = true;
-		}
-		
-		// Calculate target area 
-		for(int i = 0; i < 100; i++){
-				
-				//modify current location
-				tempX += 0.01;
-				
-				// based on the Y value starting location, either build up or down
-				if(Ydirection)
-					tempY -= 0.01;
-				else
-					tempY += 0.01;
-				
-				//add them to the target area
-				targetX.add(tempX);
-				targetY.add(tempY);
-		}
-	}
-	*/
-	
 	/**
 	 * Creates a new random target within a certain area of the 'board'
 	 */
@@ -233,36 +164,12 @@ public class Game {
 		// temporary variables used to store the targets current location
 		double tempX = 0, tempY = 0;
 
-		if(!golfMode){
-			// create a random (X,Y) pair for the target
-			tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+		// create a random (X,Y) pair for the target
+		tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
 	
-			//add the random starting point to the target area
-			targetX.add(tempX);
-			targetY.add(tempY);
-		}
-		
-		else{
-			
-			if(getPar() == 3){
-				rangeMin = width/2;
-				rangeMax = width - 160;
-				tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-			}
-			
-			if(getPar() == 4){
-				rangeMin = width - 160;
-				rangeMax = width - 80;
-				tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-			}
-			
-			if(getPar() == 5){
-				rangeMin = width - 80;
-				rangeMax = width - 1;
-				tempX = rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-			}
-		}
-		
+		//add the random starting point to the target area
+		targetX.add(tempX);
+		targetY.add(tempY);
 
 		// variable used to determine if the area should be above or below the Y value
 		boolean Ydirection = false;
@@ -757,40 +664,6 @@ public class Game {
 	public double getXComponent(double velocity, double theta){
 		double xComponent = velocity * Math.cos(theta);
 		return xComponent;
-	}
-	
-	public void golfMode(boolean golfMode){
-		this.golfMode = golfMode;
-	}
-
-	public int getPar(){
-		return par;
-	}
-	
-	public void setPar(int par){
-		this.par = par;
-	}
-	
-	//Adds the previous hole score to the total score
-	public void setGolfScore(int score, int par){
-		int holeScore = score - par;
-		golfScore += holeScore;
-	}
-	
-	//Return golf score
-	public int getGolfScore(){
-		return golfScore;
-	}
-	
-	public int getCurrentHole(){
-		return currentHole;
-	}
-	
-	public int getCurrentPar(){
-		if(!isEighteen)
-			return nineHole[currentHole - 1];
-		else
-			return eighteenHole[currentHole - 1];
 	}
 	
 	//Return how many strokes
