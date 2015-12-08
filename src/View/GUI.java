@@ -1,10 +1,14 @@
 package View;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -29,6 +33,11 @@ import Model.Projectile;
  */
 public class GUI extends JFrame implements ActionListener{
 
+	DecimalFormat df = new DecimalFormat("##.##");
+
+	ImageIcon target = new ImageIcon("button.jpg");
+
+
 	/** serialVersion */
 	private static final long serialVersionUID = 1L;
 
@@ -43,6 +52,8 @@ public class GUI extends JFrame implements ActionListener{
 
 	/** fire the ball */
 	private JButton fire;
+
+	private JButton autoSolve;
 
 	/** x velocity label */
 	private JLabel velocityLabel;
@@ -77,11 +88,14 @@ public class GUI extends JFrame implements ActionListener{
 	/** change the projectile */
 	private JMenuItem projectileSelect;
 
-	/** change the planet */
+	/** select golf mode */
 	private JCheckBoxMenuItem golf;
 
 	/** change the planet */
 	private JMenuItem bounceOn;
+
+	/** select air resistance mode */
+	private JCheckBoxMenuItem airResistanceMode;
 
 	/** menu bar that contains the menu items */
 	private JMenuBar bar;
@@ -129,7 +143,7 @@ public class GUI extends JFrame implements ActionListener{
 	private JLabel currPlanet;
 	private JLabel currGravity;
 
-	private JLabel trajLabel;
+	private JLabel modeLabel;
 
 	private JLabel airLabel;
 
@@ -147,10 +161,17 @@ public class GUI extends JFrame implements ActionListener{
 		panel = new JPanel();
 		panelNorth = new JPanel();
 		panelSouth = new JPanel(new GridLayout(6,0));
-		fire = new JButton("Fire!");
+
+		fire = new JButton("Fire");
+		fire.setSize(10, 10);
+		fire.setContentAreaFilled(false);
+
+		autoSolve = new JButton("Auto Solve");
+		autoSolve.setBackground(Color.RED);
 		reset = new JMenuItem("New Game");
 		exit = new JMenuItem("Exit");
 		golf = new JCheckBoxMenuItem("Golf mode");
+		airResistanceMode = new JCheckBoxMenuItem("Air Resistance");
 		bounceOn = new JMenuItem("Bounce on");
 		planetSelect = new JMenuItem("Select Planet");
 		projectileSelect = new JMenuItem("Select Projectile");
@@ -168,14 +189,14 @@ public class GUI extends JFrame implements ActionListener{
 		score = new JLabel("Score: " + game.getScore());
 		velocityField = new JTextField(length);
 		thetaField = new JTextField(length);
-		
+
 		leaderboardMenu = new JMenuItem("Show Leaderboard");
-		
-		trajLabel = new JLabel("No Resistance");
+
+		modeLabel = new JLabel("No Resistance");
 		airLabel = new JLabel("Air Resistance");
-		
+
 		trajPanel = new TrajectoryPanel();
-		trajPanel.add(trajLabel);
+		trajPanel.add(modeLabel);
 		airPanel = new AirPanel();
 		airPanel.add(airLabel);
 		numTurns = 0;
@@ -188,6 +209,7 @@ public class GUI extends JFrame implements ActionListener{
 		file.add(reset);
 		file.add(exit);
 		mode.add(golf);
+		mode.add(airResistanceMode);
 		mode.add(bounceOn);
 		edit.add(planetSelect);
 		edit.add(projectileSelect);
@@ -204,17 +226,21 @@ public class GUI extends JFrame implements ActionListener{
 		panelNorth.add(thetaLabel);
 		panelNorth.add(thetaField);
 		panelNorth.add(fire);
+		panelNorth.add(autoSolve);
 		panelSouth.add(targetLocation);
 		panelSouth.add(numOfTurns);
 		panelSouth.add(score);
 		panelSouth.add(currPlanet);
 		panelSouth.add(currGravity);
 
+		panel.setBorder(BorderFactory.createBevelBorder(0,Color.BLACK, Color.BLACK));
+
+
 		setJMenuBar(bar);
 
 		//adds trajectory panels to GUI
 		add(trajPanel, BorderLayout.SOUTH);
-		add(airPanel, BorderLayout.CENTER);
+		//add(airPanel, BorderLayout.CENTER);
 
 		//frame options
 		pack();
@@ -230,19 +256,27 @@ public class GUI extends JFrame implements ActionListener{
 		planetSelect.addActionListener(this);
 		projectileSelect.addActionListener(this);
 		golf.addActionListener(this);
+		airResistanceMode.addActionListener(this);
 		leaderboardMenu.addActionListener(this);
+		autoSolve.addActionListener(this);
+
 	}
 
 	/**
 	 * Resets the panels by clearing the arcs
 	 */
 	private void resetPanels(){
-		trajPanel.removeAll();
-		trajPanel.resetVelocities();
-		trajPanel.updateUI();
-		airPanel.removeAll();
-		airPanel.resetVelocities();
-		airPanel.updateUI();
+		if(airResistanceMode.isSelected()){
+			airPanel.removeAll();
+			airPanel.resetVelocities();
+			airPanel.updateUI();
+		}
+		else {
+			trajPanel.removeAll();
+			trajPanel.resetVelocities();
+			trajPanel.updateUI();
+
+		}
 		game.resetPath();
 	}
 
@@ -301,14 +335,10 @@ public class GUI extends JFrame implements ActionListener{
 				double x = game.getXComponent(xVal, yVal);
 				double y = game.getYComponent(xVal, yVal);
 
-				System.out.println(x);
-				System.out.println(y);
-
 				game.setVelX(x);
 				game.setVelY(y);
 
 				// throw the ball
-
 				game.throwBall(x, y);
 				game.throwBall(x, y, projectile.getMass(), projectile.getDiameter());
 
@@ -357,13 +387,13 @@ public class GUI extends JFrame implements ActionListener{
 
 			trajPanel.setBackground(p.getColors().getBackground());
 			airPanel.setBackground(p.getColors().getBackground());
-			
+
 			trajPanel.setColors(p.getColors());
 			airPanel.setColors(p.getColors());
-			
-			trajLabel.setForeground(p.getColors().getArc());
+
+			modeLabel.setForeground(p.getColors().getArc());
 			airLabel.setForeground(p.getColors().getArc());
-			
+
 			currPlanet.setText("Planet: " + p);
 			currGravity.setText("Gravity: " + p.getGravity());
 		}
@@ -375,14 +405,59 @@ public class GUI extends JFrame implements ActionListener{
 
 		if(e == golf){
 			if(golf.isSelected()){
+				modeLabel.setText("Golf Mode");
+				autoSolve.setEnabled(false);
 				game.golfMode(true);
+				airResistanceMode.setEnabled(false);
 
 			}
+			if(!golf.isSelected()){
+				modeLabel.setText("No Resistance");
+				autoSolve.setEnabled(true);
+				airResistanceMode.setEnabled(true);
+			}
 		}
-		
+
 		if(e == leaderboardMenu){
 			JOptionPane.showMessageDialog(this, game.printLeaderboard(),"Leaderboard", JOptionPane.INFORMATION_MESSAGE);
 		}
+
+		if(e == autoSolve){
+			/*if(velocityField.getText().equals("")){
+				JOptionPane.showMessageDialog(this, "Enter value into velocity field.");
+			}
+			else{*/
+			//double velocity = Double.parseDouble(velocityField.getText());
+			double theta = game.autoSolverTheta(70, p.getGravity(), game.getTargetX(0));
+			velocityField.setText("" + 70);
+			thetaField.setText("" + df.format(theta));
+
+			//System.out.println("Velocity: " + velocity);
+			System.out.println("Theta: " + theta);
+			// set the values of the velocities
+			theta = Math.toRadians(theta);
+			//System.out.println("Radians: " + theta);
+			double x = game.getXComponent(70, theta);
+			double y = game.getYComponent(70, theta);
+
+			game.throwBall(x, y);
+			//}
+		}
+
+		if(airResistanceMode.isSelected()){
+			golf.setEnabled(false);
+			add(airPanel, BorderLayout.SOUTH);
+			modeLabel.setText("Air Resistance");
+			//resetPanels();
+			revalidate();
+		}
+
+		if(!airResistanceMode.isSelected()){
+			golf.setEnabled(true);
+			modeLabel.setText("No Resistance");
+		}
+
+
 
 	}
 }
