@@ -1,13 +1,15 @@
-# TO DO #
+﻿# TO DO #
+	Finish coding					david
+	objective						david
+	Feature list					david
+	use cases						ian
+	UML							david
+	print these things:				
+		git log					
+		source code					
+		test cases					
+	roles/responsibilities				everybody
+	self-reflection					everybody
+	user guide						ian
+	java style guide					???
 
-### GUI ###
-*  Scaling (scale to the game)  (MATT)
-*  Animated path  (DAVID)
-*  Redrawing path && target with new game (???)
-*  
-
-### Game ###
-*  Air resistance  
-*  Planets (diff gravity/skins?)
-*  Angle?
-*
