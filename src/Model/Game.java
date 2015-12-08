@@ -51,7 +51,7 @@ public class Game {
 	private int bounceCounter = 0;
 	
 	/* the maximum number of bounces allowed */
-	private int maxBounce = 1;
+	private int maxBounce = 0;
 	
 	/* truncates double values for readability/calculations */
 	private DecimalFormat df;
