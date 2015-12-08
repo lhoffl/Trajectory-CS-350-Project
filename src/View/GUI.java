@@ -408,19 +408,27 @@ public class GUI extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(this, game.printLeaderboard(),"Leaderboard", JOptionPane.INFORMATION_MESSAGE);
 		}
 
-		if(e == autoSolve){
-			double theta = game.autoSolverTheta(70, p.getGravity(), game.getTargetX(0));
-			velocityField.setText("" + 70);
-			thetaField.setText("" + df.format(theta));
+		if (e == autoSolve) {
 
-			System.out.println("Theta: " + theta);
-			// set the values of the velocities
-			theta = Math.toRadians(theta);
-			//System.out.println("Radians: " + theta);
-			double x = game.getXComponent(70, theta);
-			double y = game.getYComponent(70, theta);
+			if(!velocityField.getText().equals("") && thetaField.getText().equals("")){
+				double velocity = Double.parseDouble(velocityField.getText());
+				double theta = game.autoSolverTheta(velocity, p.getGravity(),
+						game.getTargetX(0));
+				if (theta == -1000)
+					JOptionPane.showMessageDialog(this,
+							"Velocity too large or too small to hit target");
+				else {
+					velocityField.setText("" + velocity);
+					thetaField.setText("" + df.format(theta));
 
-			game.throwBall(x, y);
+					theta = Math.toRadians(theta);
+					double x = game.getXComponent(velocity, theta);
+					double y = game.getYComponent(velocity, theta);
+
+					game.throwBall(x, y);
+				}
+			}
+
 		}
 
 		if(airResistanceMode.isSelected()){
