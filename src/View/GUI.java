@@ -33,11 +33,6 @@ import Model.Projectile;
  */
 public class GUI extends JFrame implements ActionListener{
 
-	DecimalFormat df = new DecimalFormat("##.##");
-
-	ImageIcon target = new ImageIcon("button.jpg");
-
-
 	/** serialVersion */
 	private static final long serialVersionUID = 1L;
 
@@ -53,6 +48,7 @@ public class GUI extends JFrame implements ActionListener{
 	/** fire the ball */
 	private JButton fire;
 
+	/** button for auto solve method */
 	private JButton autoSolve;
 
 	/** x velocity label */
@@ -146,7 +142,8 @@ public class GUI extends JFrame implements ActionListener{
 	private JLabel modeLabel;
 
 	private JLabel airLabel;
-
+	
+	/** menu item that lets the user view the leaderboard */
 	private JMenuItem leaderboardMenu;
 
 	/**
@@ -154,6 +151,7 @@ public class GUI extends JFrame implements ActionListener{
 	 */
 	public GUI(){
 
+		//instantiations
 		game = game.getGameObject();
 		p = Planet.EARTH;
 		projectile = Projectile.Default;
@@ -161,11 +159,7 @@ public class GUI extends JFrame implements ActionListener{
 		panel = new JPanel();
 		panelNorth = new JPanel();
 		panelSouth = new JPanel(new GridLayout(8,0));
-
 		fire = new JButton("Fire");
-		fire.setSize(10, 10);
-		fire.setContentAreaFilled(false);
-
 		autoSolve = new JButton("Auto Solve");
 		autoSolve.setBackground(Color.RED);
 		reset = new JMenuItem("New Game");
@@ -189,9 +183,7 @@ public class GUI extends JFrame implements ActionListener{
 		score = new JLabel("Score: " + game.getScore());
 		velocityField = new JTextField(length);
 		thetaField = new JTextField(length);
-
 		leaderboardMenu = new JMenuItem("Show Leaderboard");
-
 		modeLabel = new JLabel("No Resistance");
 		trajPanel = new TrajectoryPanel();
 		//trajPanel.add(modeLabel);
@@ -214,6 +206,7 @@ public class GUI extends JFrame implements ActionListener{
 
 		setLayout(new BorderLayout());
 
+		//add various components
 		add(panel, BorderLayout.NORTH);
 		panel.add(panelNorth);
 		panel.add(panelSouth);
@@ -265,6 +258,7 @@ public class GUI extends JFrame implements ActionListener{
 	 * Resets the panels by clearing the arcs
 	 */
 	private void resetPanels(){
+	
 		if(airResistanceMode.isSelected()){
 			airPanel.removeAll();
 			airPanel.resetVelocities();
@@ -283,8 +277,8 @@ public class GUI extends JFrame implements ActionListener{
 	 * Create a new game
 	 */
 	private void newGame() {
+	
 		numTurns = 0;
-
 		game.resetScore();
 		nextTarget();
 	}
@@ -293,6 +287,7 @@ public class GUI extends JFrame implements ActionListener{
 	 * Create a new target and reset text fields
 	 */
 	private void nextTarget() {
+	
 		game.newTarget();
 		numOfTurns.setText("Number of Shots: " + numTurns);
 		targetLocation.setText("Target location:("+ game.getTargetX() + ", " + game.getTargetY() + ")");
@@ -399,15 +394,18 @@ public class GUI extends JFrame implements ActionListener{
 			currGravity.setText("Gravity: " + p.getGravity());
 		}
 
+		//displays JDialog that lets the user change the projectile 
 		if(e == projectileSelect){
 			changeProjectile = new ChangeProjectile();
 			projectile = changeProjectile.getProjectile();
 		}
 
+		//if leaderboard is slected display leaderboard
 		if(e == leaderboardMenu){
 			JOptionPane.showMessageDialog(this, game.printLeaderboard(),"Leaderboard", JOptionPane.INFORMATION_MESSAGE);
 		}
 
+		//if user clicks auto solve then auto solve for theta
 		if (e == autoSolve) {
 
 			if(!velocityField.getText().equals("") && thetaField.getText().equals("")){
@@ -430,14 +428,17 @@ public class GUI extends JFrame implements ActionListener{
 			}
 
 		}
-
+		
+		//if user selects air resistance mode add air resistance trajectory
 		if(airResistanceMode.isSelected()){
+		
 			golf.setEnabled(false);
 			game.setMode(1);
 			modeLabel.setText("Air Resistance overlay");
 			revalidate();
 		}
 
+		//if air resistance is deselected then just vacuum trajectory
 		if(!airResistanceMode.isSelected()){
 			game.setMode(0);
 			modeLabel.setText("No Resistance");
