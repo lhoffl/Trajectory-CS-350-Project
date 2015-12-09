@@ -7,7 +7,7 @@ import java.awt.Color;
  * experience.
  * 
  * @author Matthew Hoffman, Ian Mohr, David Fletcher
- * @version Release Two | Last Updated: 11/11/2015
+ * @version Release Three | Last Updated: 12/09/2015
  */
 public enum Planet {	
 
@@ -60,6 +60,7 @@ public enum Planet {
 	 * @param Color sets the planet's color
 	 */
 	Planet(String name, double surfaceGravity, ColorSet colors){
+	
 		this.name = name;
 		this.surfaceGravity = surfaceGravity;
 		this.colors = colors;
@@ -70,6 +71,7 @@ public enum Planet {
 	 * @param name sets the planet's name
 	 */
 	public void setName(String name){
+	
 		this.name = name;
 	}
 
@@ -78,6 +80,7 @@ public enum Planet {
 	 * @param surfaceGravity sets the gravity of the planet
 	 */
 	public void setGravity(double surfaceGravity){
+	
 			this.surfaceGravity = surfaceGravity;
 	}
 	
@@ -87,6 +90,7 @@ public enum Planet {
 	 * @return returns gravity
 	 */
 	public double getGravity(){
+	
 		return surfaceGravity;
 	}
 	
@@ -95,6 +99,7 @@ public enum Planet {
 	 * @return returns planet's color
 	 */
 	public ColorSet getColors(){
+	
 		return colors;
 	}
 	
@@ -104,6 +109,7 @@ public enum Planet {
 	 */
 	@Override
 	public String toString(){
+	
 		return name;
 	}
 	
