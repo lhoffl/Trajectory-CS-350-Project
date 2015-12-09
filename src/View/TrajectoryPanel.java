@@ -61,10 +61,13 @@ public class TrajectoryPanel extends JPanel{
 	/** instance of the Game class */
 	private Game game;
 
+	/** color of the trajectory arc */
 	private Color arc;
 
+	/** color of the break line */
 	private Color break_line;
 
+	/** color of the flagpole */
 	private Color targetColor;
 
 	/**
@@ -91,6 +94,7 @@ public class TrajectoryPanel extends JPanel{
 		g2d.scale(1, -1);
 		getLayout();
 		
+		//break line
 		g.setColor(break_line);
 		g2d.drawLine(0, 0, getWidth(), 0);
 		
@@ -169,11 +173,13 @@ public class TrajectoryPanel extends JPanel{
 		
 	}
 
+	/**
+	 * Sets the colors of the arc, break line, and flagpole
+	 * @param ColorSet colors, set of colors for the various objects
+	 */
 	public void setColors(ColorSet colors) {
 		arc = colors.getArc();
 		break_line = colors.getBreak();
 		targetColor = colors.getTarget();
 	}
-
-	
 }
