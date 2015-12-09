@@ -6,7 +6,7 @@ import View.GUI;
  * Class that builds the GUI 
  * 
  * @author Matthew Hoffman, Ian Mohr, David Fletcher
- * @version Two | 11/11/2015
+ * @version Three | 12/09/2015
  */
 public class Trajectory {
 	
