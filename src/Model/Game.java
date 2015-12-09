@@ -19,7 +19,7 @@ import java.util.Scanner;
  * hit a random target
  * 
  * @author Matthew Hoffman, Ian Mohr, David Fletcher
- * @version Release Two | Last Updated: 11/11/2015
+ * @version Release Three | Last Updated: 12/09/2015
  */
 public class Game {
 	
@@ -83,19 +83,26 @@ public class Game {
 	/* the number of targets the player has hit this game */
 	private int score;
 	
+	/** HashMap that stores the place number and name of the leaderboard */
 	private HashMap<Integer, String> leaderboard;
 	
+	/** shot number of the current turn */
 	private int shotNumber;
 
+	/** if the game is only vaccuum */
 	private final int vaccuumOnly = 0;
+	
+	/** vaccuum and air resistance modes */
 	private final int bothModes = 1;
 	
+	/** keeps track of which game mode is being played */
 	private int mode;
 	
 	/**
 	 * Constructor that initializes the game
 	 */
 	public Game(){
+	
 		// instantiate the path array lists
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
@@ -130,11 +137,16 @@ public class Game {
 	 * @return returns a new Game instance
 	 */
 	public static Game getGameObject(){
+	
 		if(game == null)
 			game = new Game();
 		return game;
 	}
 	
+	/**
+	 * Displays the leaderboard.
+	 * @return String, returns the names of the leaderboard
+	 */
 	public String printLeaderboard(){
 		String printMe = "";
 		for(int i = 1; i < leaderboard.size()+1; i++){
@@ -147,7 +159,6 @@ public class Game {
 	/**
 	 * Creates a new random target within a certain area of the 'board'
 	 */
-	 
 	public void newTarget(){
 
 		// If a target exists remove it 1
@@ -367,6 +378,11 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Checks the score of the current game to the leaderboard.
+	 * @param int score, the current score of the game
+	 * @return returns the score of the leaderboard
+	 */
 	public int checkScore(int score){
 		
 		String currPlayer;
@@ -386,6 +402,12 @@ public class Game {
 		return -1;
 	}
 	
+	/**
+	 * Updates the leaderboard if the current score places high enough.
+	 * @param int i is the index location on the leaderboard
+	 * @param int score is the current score of the game
+	 * @param name is the name of the current player
+	 */
 	public void updateLeaderboard(int i, int score, String name){
 		int j = i;
 		String temp = leaderboard.get(j);
@@ -407,7 +429,12 @@ public class Game {
 		}
 		saveLeaderboard();
 	}
+	
+	/**
+	 * Gets the most up to date leaderboard.
+	 */
 	public void retrieveLeaderboard(){
+	
 		leaderboard = new HashMap<Integer, String>();
 		File file = new File("leaderboard.txt");
 		Scanner sc;
@@ -426,6 +453,9 @@ public class Game {
 		}	
 	}
 	
+	/**
+	 * Saves the leaderboard for future use.
+	 */
 	public void saveLeaderboard(){
 		
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("leaderboard.txt"), StandardCharsets.UTF_8))) {
@@ -436,13 +466,13 @@ public class Game {
 		}  
 	}
 	
-	
 	/**
 	 * Returns the current X starting point of the target
 	 * @param i is the index value
 	 * @return targetX
 	 */
 	public double getTargetX(int i){
+	
 		return targetX.get(i);
 	}
 	
@@ -451,6 +481,7 @@ public class Game {
 	 * @return targetX in string form
 	 */
 	public String getTargetX(){
+	
 		return df.format(targetX.get(0));
 	}
 	
@@ -460,6 +491,7 @@ public class Game {
 	 * @return pathX
 	 */
 	public double getPathX(int i){
+	
 		if(i < getPathSize())
 			return pathX.get(i);
 		return 0;
@@ -470,6 +502,7 @@ public class Game {
 	 * @return size of path
 	 */
 	public int getPathSize(){
+	
 		return pathX.size();
 	}
 	
@@ -479,6 +512,7 @@ public class Game {
 	 * @return size of path
 	 */
 	public int getAirPathSize(){
+	
 		return pathXAir.size();
 	}
 
@@ -489,6 +523,7 @@ public class Game {
 	 * @return targetY
 	 */
 	public double getTargetY(int i){
+	
 		return targetY.get(i);
 	}
 	
@@ -497,6 +532,7 @@ public class Game {
 	 * @return the target location in String form
 	 */
 	public String getTargetY(){
+	
 		return df.format(targetY.get(0));
 	}
 	
@@ -506,6 +542,7 @@ public class Game {
 	 * @return pathY
 	 */
 	public double getPathY(int i){
+	
 		if(i < getPathSize())
 			return pathY.get(i);
 		return 0;
@@ -516,6 +553,7 @@ public class Game {
 	 * @return int of path size for air resistance arc
 	 */
 	public int getPathSizeAir() {
+	
 		return pathXAir.size();
 	}
 
@@ -525,6 +563,7 @@ public class Game {
 	 * @return pathXAir
 	 */
 	public double getPathXAir(int i) {
+	
 		if(i < getPathSizeAir())
 			return pathXAir.get(i);
 		return 0;
@@ -536,6 +575,7 @@ public class Game {
 	 * @return pathYAir
 	 */
 	public double getPathYAir(int i) {
+	
 		if(i < getPathSizeAir()){
 			return pathYAir.get(i);
 		}
@@ -547,6 +587,7 @@ public class Game {
 	 * @param x sets the global velocityX to input velocity
 	 */
 	public void setVelX(double x){
+	
 		velocityX = x;
 	}
 	
@@ -555,6 +596,7 @@ public class Game {
 	 * @param y sets the global velocityY to input velocity
 	 */
 	public void setVelY(double y){
+	
 		velocityY = y;
 	}
 	
@@ -563,6 +605,7 @@ public class Game {
 	 * @return velocityX
 	 */
 	public double getVelX(){
+	
 		return velocityX;
 	}
 	
@@ -571,6 +614,7 @@ public class Game {
 	 * @return velocityY
 	 */
 	public double getVelY(){
+	
 		return velocityY;
 	}
 	
@@ -579,6 +623,7 @@ public class Game {
 	 * @return height
 	 */
 	public int getHeight(){
+	
 		return height;
 	}
 	
@@ -587,6 +632,7 @@ public class Game {
 	 * @return width
 	 */
 	public int getWidth(){
+	
 		return width;
 	}
 	
@@ -595,6 +641,7 @@ public class Game {
 	 * @return score
 	 */
 	public int getScore(){
+	
 		return score;
 	}
 	
@@ -602,6 +649,7 @@ public class Game {
 	 * Resets the paths for both panels
 	 */
 	public void resetPath(){
+	
 		pathX = new ArrayList<Double>();
 		pathY = new ArrayList<Double>();
 		
@@ -613,6 +661,7 @@ public class Game {
 	 * Reset the game score to 0
 	 */
 	public void resetScore(){
+	
 		score = 0;
 	}
 	
@@ -621,6 +670,7 @@ public class Game {
 	 * @param gravity sets the global variable gravity
 	 */
 	public void setGravity(double gravity){
+	
 		this.gravity = gravity;
 	}
 	
@@ -629,6 +679,7 @@ public class Game {
 	 * @return pathX
 	 */
 	public ArrayList<Double> PathX(){
+	
 		return pathX;
 	}
 	
@@ -637,6 +688,7 @@ public class Game {
 	 * @return pathY
 	 */
 	public ArrayList<Double> PathY(){
+	
 		return pathX;
 	}
 	
@@ -645,6 +697,7 @@ public class Game {
 	 * @return pathXAir
 	 */
 	public ArrayList<Double> PathXAir(){
+	
 		return pathX;
 	}
 	
@@ -653,35 +706,68 @@ public class Game {
 	 * @return pathYAir
 	 */
 	public ArrayList<Double> PathYAir(){
+	
 		return pathX;
 	}
 
+	 /**
+	 * Converts the inputs into a y component for the shot.
+	 * @param velocity is the velocity the user inputs
+	 * @param theta is the angle the user inputs
+	 * @return returns a y-component double based on velocity, theta
+	 */
 	public double getYComponent(double velocity, double theta){
+	
 		double yComponent = velocity * Math.sin(theta);
 		return yComponent;
 	}
 
+	 /**
+	 * Converts the inputs into a x component for the shot.
+	 * @param velocity is the velocity the user inputs
+	 * @param theta is the angle the user inputs
+	 * @return returns a x-component double based on velocity, theta
+	 */
 	public double getXComponent(double velocity, double theta){
+	
 		double xComponent = velocity * Math.cos(theta);
 		return xComponent;
 	}
 	
-	//Return how many strokes
+	 /**
+	 * Gets the current shot number for the turn.
+	 * @return returns the current shot number
+	 */
 	public int getShotNumber(){
+	
 		return shotNumber;
 	}
 
-	//First shot of a hole
+	/**
+	 * Sets the shots to 0 after new turn.
+	 */
 	public void resetShotNumber(){
+	
 		shotNumber = 0;
 	}
 
-	//Add 1 to shotNumber after shot
+	/**
+	 * Increments the shot by 1 after a user fires the projectile.
+	 */
 	public void incrementShotNumber(){
+	
 		shotNumber++;
 	}
 	
+	/**
+	 * Solves the current hole based on the velocity given by the user.
+	 * @param velocity is the velocity input by the user.
+	 * @param gravity is the current gravity of the planet.
+	 * @param range is the location of the target.
+	 * @return returns a theta that can be used to hit the target.
+	 */
 	public double autoSolverTheta(double velocity, double gravity, double range){
+	
 		double theta;
 
 		theta = (range * gravity) / (Math.pow(velocity,  2));
@@ -696,16 +782,31 @@ public class Game {
 		return theta;
 	}
 	
+	/**
+	 * Gets the current mode of the game, either vaccuum or vaccuum and air resistance.
+	 * @return returns the current mode of the game.
+	 */
 	public int getMode(){
+	
 		return mode;
 	}
 	
+	/**
+	 * Sets the mode to either vaccuum or vaccuum and air resistance.
+	 * @param the mode of the current game
+	 */
 	public void setMode(int mode){
+	
 		if(mode == vaccuumOnly || mode == bothModes)
 			this.mode = mode;
 	}
 	
+	/**
+	 * Sets the width of the game.
+	 * @param sets the width of the game.
+	 */
 	public void setWidth(int width){
+	
 		this.width = width;
 	}
 }
